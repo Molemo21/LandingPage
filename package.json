@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test-prod-db": "node scripts/test-prod-connection.js",
+    "test-form": "node scripts/test-form.js"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
@@ -47,7 +49,7 @@
     "framer-motion": "latest",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
-    "mongodb": "^6.16.0",
+    "mongodb": "5.5",
     "next": "15.2.4",
     "next-themes": "latest",
     "react": "^19",

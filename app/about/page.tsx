@@ -150,7 +150,7 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Our Mission & Values</h2>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-[#4A4A4A]">Our Mission & Values</h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 At ProLiink Connect, we're guided by a set of core values that shape everything we do.
               </p>
@@ -253,4 +253,38 @@ export default function AboutPage() {
       </footer>
     </div>
   )
+}
+
+export const dbConfig = {
+  // Database name used across the application
+  dbName: 'proliink',
+  
+  // Collection names
+  collections: {
+    contacts: 'contacts',
+  },
+  
+  // Connection options for both local and Atlas
+  options: {
+    connectTimeoutMS: 10000,
+    retryWrites: true,
+    maxPoolSize: 10
+  }
+}
+
+// Function to get the correct MongoDB URI based on environment
+export function getMongoURI(): string {
+  // If MONGODB_URI is provided (like in production or when using Atlas), use it
+  if (process.env.MONGODB_URI) {
+    return process.env.MONGODB_URI
+  }
+
+  // For local development, construct the local URI
+  const localURI = `mongodb://localhost:27017/${dbConfig.dbName}`
+  return localURI
+}
+
+// Function to determine if we're using local or Atlas connection
+export function isLocalConnection(uri: string): boolean {
+  return uri.includes('localhost') || uri.includes('127.0.0.1')
 }

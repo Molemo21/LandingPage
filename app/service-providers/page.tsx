@@ -49,10 +49,8 @@ export default function ServiceProvidersPage() {
                   Join a trusted network of service professionals and get matched with real clients near you.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" className="bg-[#00A3E0] hover:bg-[#0089BD]">
-                    Join Now
-                  </Button>
-                  <Button size="lg" variant="outline" asChild>
+                  
+                  <Button size="lg" variant="outline" className="bg-white text-[#00A3E0] hover:bg-[#0089BD] text-black" asChild>
                     <Link href="/how-it-works">Learn How It Works</Link>
                   </Button>
                 </div>

@@ -87,8 +87,7 @@ export default function LandingPage() {
                 Connecting You with Trusted Professionals for Fast, Safe, and Reliable Services.
               </h1>
               <p className="max-w-[600px] mx-auto text-gray-200 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed mb-8">
-                Our platform makes it easy for you to find, hire, and connect with vetted service providers near
-                you—on-demand.
+                The smart way to link professionals and clients.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
@@ -109,7 +108,7 @@ export default function LandingPage() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-[#4A4A4A]">
                   What We Bring to the Table
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
@@ -217,7 +216,7 @@ export default function LandingPage() {
                     className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
                     style={{ color: "#4A4A4A" }}
                   >
-                    About ProL<span className="text-[#00A3E0]">ii</span>nk Connect
+                    About ProL<span className="text-[#00A3E0]">ii</span>nk Co<span className="text-[#00A3E0]">nn</span>ect
                   </h2>
                   <div className="space-y-4">
                     <p className="text-muted-foreground">
@@ -330,7 +329,7 @@ export default function LandingPage() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">What Our Users Say</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-[#4A4A4A]">What Our Users Say</h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Don't just take our word for it. Here's what people are saying about our platform.
                 </p>
@@ -476,7 +475,7 @@ export default function LandingPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="text-center">
                   <h3 className="text-xl font-bold mb-2">Email</h3>
-                  <p>support@proliinkconnect.com</p>
+                  <p>support@proliinkconnect.co.za</p>
                 </div>
                 <div className="text-center">
                   <h3 className="text-xl font-bold mb-2">Phone</h3>
@@ -484,12 +483,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="mt-8 text-center">
-                <Button
-                  className="bg-white text-[#4A4A4A] hover:bg-blue-50 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-                  asChild
-                >
-                  <Link href="/contact">Get in Touch</Link>
-                </Button>
+                
               </div>
             </div>
           </div>
@@ -502,7 +496,7 @@ export default function LandingPage() {
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Ready to Get Started?</h2>
                 <p className="max-w-[900px] md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Fill out the form below and we'll get in touch with you shortly.
+                  Fill out the form below to be part of the community.
                 </p>
               </div>
               <div className="w-full max-w-md mt-6">
@@ -518,10 +512,10 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div>
               <h3 className="text-lg font-bold">
-                ProL<span className="text-blue-600">ii</span>nk Connect
+                ProL<span className="text-blue-600">ii</span>nk Co<span className="text-blue-600">nn</span>ect
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Connecting skilled professionals with clients across Africa.
+                The smart way to link professionals and clients.
               </p>
             </div>
             <div>

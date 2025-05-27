@@ -18,9 +18,17 @@ export async function POST(request: Request) {
       { status: 201 }
     )
   } catch (error) {
-    console.error('Error submitting contact form:', error)
+    // Log the full error for debugging
+    console.error('Detailed error:', error)
+    
+    // Send a more specific error message
+    let errorMessage = "Error submitting contact form"
+    if (error instanceof Error) {
+      errorMessage = error.message
+    }
+    
     return NextResponse.json(
-      { message: "Error submitting contact form" },
+      { message: errorMessage },
       { status: 500 }
     )
   }

@@ -1,11 +1,19 @@
 import { MongoClient } from 'mongodb'
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')
+// In production, use MONGODB_URI from environment variables
+// In development, fallback to local MongoDB if no URI is provided
+const MONGODB_URI = process.env.NODE_ENV === 'production'
+  ? process.env.MONGODB_URI
+  : (process.env.MONGODB_URI || 'mongodb://localhost:27017/proliink')
+
+if (!MONGODB_URI) {
+  throw new Error('Please define the MONGODB_URI environment variable')
 }
 
-const uri = process.env.MONGODB_URI
-const options = {}
+const options = {
+  connectTimeoutMS: 10000, // Timeout after 10 seconds
+  retryWrites: true
+}
 
 let client
 let clientPromise: Promise<MongoClient>
@@ -18,14 +26,22 @@ if (process.env.NODE_ENV === 'development') {
   }
 
   if (!globalWithMongo._mongoClientPromise) {
-    client = new MongoClient(uri, options)
+    client = new MongoClient(MONGODB_URI, options)
     globalWithMongo._mongoClientPromise = client.connect()
+      .catch(err => {
+        console.error('Failed to connect to MongoDB:', err)
+        throw err
+      })
   }
   clientPromise = globalWithMongo._mongoClientPromise
 } else {
   // In production mode, it's best to not use a global variable.
-  client = new MongoClient(uri, options)
+  client = new MongoClient(MONGODB_URI, options)
   clientPromise = client.connect()
+    .catch(err => {
+      console.error('Failed to connect to MongoDB:', err)
+      throw err
+    })
 }
 
 // Export a module-scoped MongoClient promise. By doing this in a
