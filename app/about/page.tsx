@@ -62,7 +62,8 @@ export default function AboutPage() {
   ]
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col relative overflow-hidden">
+      <GodRays />
       {/* Hero Section */}
       <ParallaxHero
         title="About ProLiink Connect"
@@ -83,7 +84,7 @@ export default function AboutPage() {
       </ParallaxHero>
 
       {/* Our Story Section */}
-      <section className="w-full py-16 md:py-24 lg:py-32 bg-white dark:bg-gray-900">
+      <section className="w-full py-16 md:py-24 lg:py-32 bg-black text-white">
         <div className="container px-4 md:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -140,7 +141,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Mission & Values Section */}
-      <section className="w-full py-16 md:py-24 lg:py-32 gradient-bg-light dark:gradient-bg-dark">
+      <section className="w-full py-16 md:py-24 lg:py-32 bg-black text-white">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
             <motion.div
@@ -173,9 +174,6 @@ export default function AboutPage() {
 
       {/* Meet Our Leadership Team Section */}
       <section className="relative w-full py-16 md:py-24 lg:py-32 bg-black text-white overflow-hidden">
-        {/* God ray animation */}
-        <GodRays />
-
         <div className="container relative z-10 px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
             <motion.div
@@ -201,7 +199,7 @@ export default function AboutPage() {
       </section>
 
       {/* Join Our Team Section */}
-      <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-r from-[#00A3E0] to-[#4A4A4A] text-white">
+      <section className="w-full py-16 md:py-24 lg:py-32 bg-black text-white">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-6 text-center">
             <motion.div
@@ -233,7 +231,7 @@ export default function AboutPage() {
       </section>
 
       {/* Footer */}
-      <footer className="w-full border-t py-6 bg-gray-100 dark:bg-gray-900">
+      <footer className="w-full border-t py-6 bg-black text-white">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">© 2024 ProLiink Connect. All rights reserved.</p>

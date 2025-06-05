@@ -3,9 +3,10 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
+import { use } from "react"
 
 export default function ServiceDetailPage({ params }: { params: { slug: string } }) {
-  const { slug } = params
+  const { slug } = use(params)
 
   // Format the slug for display
   const formattedTitle = slug

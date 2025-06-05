@@ -16,21 +16,32 @@ interface ServiceCardProps {
   subcategories: string[]
   index: number
   slug: string
+  backgroundImage?: string
 }
 
-export function ServiceCard({ icon, title, description, subcategories, index, slug }: ServiceCardProps) {
+export function ServiceCard({ icon, title, description, subcategories, index, slug, backgroundImage }: ServiceCardProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
       <motion.div
-        className="flex flex-col h-full rounded-lg border bg-card shadow-sm hover:shadow-md transition-all duration-300"
+        className="flex flex-col h-full rounded-lg border bg-card shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
       >
-        <div className="flex flex-col h-full p-6">
+        {backgroundImage && (
+          <>
+            <img
+              src={backgroundImage}
+              alt="Service background"
+              className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
+            />
+            <div className="absolute inset-0 bg-black/60 z-0" />
+          </>
+        )}
+        <div className="flex flex-col h-full p-6 relative z-10">
           <div className="flex items-center gap-4 mb-4">
             <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#00A3E0]/10 flex items-center justify-center text-[#00A3E0]">
               {icon}

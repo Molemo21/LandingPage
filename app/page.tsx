@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,12 +17,22 @@ import {
   Star,
   ChevronRight,
   ArrowLeftRight,
+  Wrench,
+  Zap,
+  SprayCanIcon as Spray,
+  Hammer,
+  Paintbrush,
 } from "lucide-react"
 import { HorizontalScrollBackground } from "@/components/horizontal-scroll-background"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { MobileMenu } from "@/components/mobile-menu"
 import { FadeInSection } from "@/components/fade-in-section"
 import { ContactForm } from "@/components/contact-form"
+import { MultiStepForm } from "@/components/MultiStepForm"
+import { FAQAccordion } from "@/components/faq-accordion"
+import { ServiceCard } from "@/components/service-card"
+import { GodRays } from "@/components/god-rays"
+import { useRef } from "react"
 
 export default function LandingPage() {
   // Navigation links
@@ -34,19 +46,78 @@ export default function LandingPage() {
 
   // Images for the hero background
   const heroBackgroundImages = [
-    "/images/painter.png",
-    "/images/electrician.png",
-    "/images/hairdresser.webp",
-    "/images/spa-treatment.png",
-    "/images/gardener.webp",
-    "/images/plumber.webp",
+    "/images/Plumber.jpg%205.webp",
+    "/images/painter%205.jpg",
+    "/images/haidresser%205.webp",
+    "/images/spa%20treatment%205.jpg",
+    "/images/electrician%205.jpg",
   ]
 
+  // Ref for horizontal scroll
+  const servicesRowRef = useRef<HTMLDivElement>(null)
+  const scrollByAmount = 320
+  const scrollLeft = () => {
+    if (servicesRowRef.current) {
+      servicesRowRef.current.scrollBy({ left: -scrollByAmount, behavior: "smooth" })
+    }
+  }
+  const scrollRight = () => {
+    if (servicesRowRef.current) {
+      servicesRowRef.current.scrollBy({ left: scrollByAmount, behavior: "smooth" })
+    }
+  }
+
+  // Service data for featured cards
+  const featuredServices = [
+    {
+      icon: <Wrench className="h-6 w-6" />,
+      title: "Plumbing",
+      description: "Professional plumbing services for your home or business.",
+      subcategories: ["Leaks", "Pipe repairs", "Geyser installations", "Drainage", "Toilet repairs"],
+      slug: "plumbing",
+    },
+    {
+      icon: <Zap className="h-6 w-6" />,
+      title: "Electrical Services",
+      description: "Licensed electricians for all your electrical needs.",
+      subcategories: ["Fault finding", "Wiring", "Light fittings", "Compliance certificates", "Power outages"],
+      slug: "electrical",
+    },
+    {
+      icon: <Spray className="h-6 w-6" />,
+      title: "Home Cleaning",
+      description: "Professional cleaning services to keep your space spotless.",
+      subcategories: ["Deep cleaning", "Move-in/move-out", "Recurring services", "Window cleaning"],
+      slug: "home-cleaning",
+    },
+    {
+      icon: <Hammer className="h-6 w-6" />,
+      title: "Appliance Repairs",
+      description: "Expert repair services for all household appliances.",
+      subcategories: ["Fridges", "Ovens", "Washing machines", "Dishwashers", "Microwaves"],
+      slug: "appliance-repairs",
+    },
+    {
+      icon: <Paintbrush className="h-6 w-6" />,
+      title: "Painting & Renovations",
+      description: "Transform your space with professional painting and renovation services.",
+      subcategories: ["Interior painting", "Exterior painting", "Plastering", "Touch-ups", "Wallpaper"],
+      slug: "painting-renovations",
+    },
+  ];
+
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col relative overflow-hidden">
+      <GodRays />
       <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between py-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <img
+              src="/images/handshake.png"
+              alt="Handshake Logo"
+              className="h-8 w-auto rounded-md shadow"
+              style={{ maxWidth: '36px' }}
+            />
             <Link href="/" className="text-xl font-bold leading-tight">
               <span className="flex flex-col">
                 <span>
@@ -58,28 +129,12 @@ export default function LandingPage() {
               </span>
             </Link>
           </div>
-          <nav className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="text-sm font-medium hover:underline">
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-4">
-              <Button variant="outline" className="border-[#00A3E0] text-[#00A3E0] hover:bg-[#00A3E0]/10" asChild>
-                <Link href="/service-providers">Become a Service Provider</Link>
-              </Button>
-              <ThemeToggle />
-            </div>
-            <MobileMenu links={navLinks} providerLink="/service-providers" />
-          </div>
+          {/* Add nav links, theme toggle, and mobile menu here if needed */}
         </div>
       </header>
-
       <main className="flex-1">
         {/* Hero Section with Horizontal Scrolling Background */}
-        <section className="relative w-full py-24 md:py-32 lg:py-40 overflow-hidden">
+        <section className="relative w-full py-24 md:py-32 lg:py-40 overflow-hidden bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800">
           <HorizontalScrollBackground images={heroBackgroundImages} />
           <div className="container relative z-10 px-4 md:px-6">
             <div className="max-w-3xl mx-auto text-center text-white">
@@ -90,21 +145,66 @@ export default function LandingPage() {
                 The smart way to link professionals and clients.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="px-8 bg-transparent text-white border-white hover:bg-white hover:text-gray-900"
-                  asChild
-                >
-                  <Link href="/services">Explore Services</Link>
-                </Button>
+                <MultiStepForm />
               </div>
             </div>
           </div>
         </section>
 
+        {/* Popular Services Row */}
+        <section className="w-full py-8">
+          <div className="container px-4 md:px-6">
+            <h2 className="text-3xl font-bold mb-6 text-center">Popular Services</h2>
+            <div className="relative">
+              {/* Left Arrow */}
+              <button type="button" onClick={scrollLeft} className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur rounded-full p-2 shadow-lg border border-white/30 hover:bg-white/40 transition hidden sm:block">
+                <ChevronRight className="h-6 w-6 text-white rotate-180" />
+              </button>
+              <div ref={servicesRowRef} className="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide">
+                {featuredServices.map((service, idx) => (
+                  <div key={service.title} className="min-w-[280px] max-w-xs flex-shrink-0">
+                    <ServiceCard
+                      icon={service.icon}
+                      title={service.title}
+                      description={service.description}
+                      subcategories={service.subcategories}
+                      index={idx}
+                      slug={service.slug}
+                      backgroundImage={
+                        service.title === "Plumbing"
+                          ? "/images/plumber%2033.jpg"
+                        : service.title === "Electrical Services"
+                          ? "/images/electrician.png"
+                        : service.title === "Home Cleaning"
+                          ? "/images/cleaning%203.jpg"
+                        : service.title === "Appliance Repairs"
+                          ? "/images/applinces%20r3.jpg"
+                        : service.title === "Painting & Renovations"
+                          ? "/images/painter%203.jpg"
+                        : undefined
+                      }
+                    />
+                  </div>
+                ))}
+                {/* View All Services Button after last card */}
+                <div className="min-w-[220px] flex items-center justify-center">
+                  <Link href="/services">
+                    <Button className="bg-[#00A3E0] hover:bg-[#0089BD] text-white px-8 py-2 rounded-full shadow-md whitespace-nowrap">
+                      View All Services
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              {/* Right Arrow */}
+              <button type="button" onClick={scrollRight} className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur rounded-full p-2 shadow-lg border border-white/30 hover:bg-white/40 transition hidden sm:block">
+                <ChevronRight className="h-6 w-6 text-white" />
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Features Section */}
-        <section id="features" className="w-full py-12 md:py-24 lg:py-32 gradient-bg-light dark:gradient-bg-dark">
+        <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -117,54 +217,48 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
-              <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm bg-card">
-                <CheckCircle className="h-12 w-12 text-blue-600" />
-                <h3 className="text-xl font-bold">Verified Providers</h3>
-                <p className="text-center text-muted-foreground">
-                  All service providers are thoroughly vetted and verified for your safety and peace of mind.
-                </p>
-              </div>
-              <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm bg-card">
-                <Truck className="h-12 w-12 text-blue-600" />
-                <h3 className="text-xl font-bold">Fast & Flexible</h3>
-                <p className="text-center text-muted-foreground">
-                  Book services for when you need them, with flexible scheduling and quick response times.
-                </p>
-              </div>
-              <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm bg-card">
-                <Smartphone className="h-12 w-12 text-blue-600" />
-                <h3 className="text-xl font-bold">Easy-to-Use Platform</h3>
-                <p className="text-center text-muted-foreground">
-                  Our intuitive web and mobile interfaces make finding and booking services a breeze.
-                </p>
-              </div>
-              <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm bg-card">
-                <MessageSquare className="h-12 w-12 text-blue-600" />
-                <h3 className="text-xl font-bold">Transparent Communication</h3>
-                <p className="text-center text-muted-foreground">
-                  Direct messaging with service providers ensures clear communication throughout the process.
-                </p>
-              </div>
-              <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm bg-card">
-                <CreditCard className="h-12 w-12 text-blue-600" />
-                <h3 className="text-xl font-bold">Secure Payments</h3>
-                <p className="text-center text-muted-foreground">
-                  Pay securely through our platform with transparent pricing and no hidden fees.
-                </p>
-              </div>
-              <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm bg-card">
-                <Globe className="h-12 w-12 text-blue-600" />
-                <h3 className="text-xl font-bold">Wide Coverage</h3>
-                <p className="text-center text-muted-foreground">
-                  Available across multiple regions with a growing network of qualified professionals.
-                </p>
-              </div>
+              {[
+                {
+                  icon: <CheckCircle className="h-12 w-12 text-blue-600" />,
+                  title: "Verified Providers",
+                  description: "All service providers are thoroughly vetted and verified for your safety and peace of mind."
+                },
+                {
+                  icon: <Truck className="h-12 w-12 text-blue-600" />,
+                  title: "Fast & Flexible",
+                  description: "Book services for when you need them, with flexible scheduling and quick response times."
+                },
+                {
+                  icon: <Smartphone className="h-12 w-12 text-blue-600" />,
+                  title: "Easy-to-Use Platform",
+                  description: "Our intuitive web and mobile interfaces make finding and booking services a breeze."
+                },
+                {
+                  icon: <MessageSquare className="h-12 w-12 text-blue-600" />,
+                  title: "Transparent Communication",
+                  description: "Direct messaging with service providers ensures clear communication throughout the process."
+                },
+                {
+                  icon: <Globe className="h-12 w-12 text-blue-600" />,
+                  title: "Wide Coverage",
+                  description: "Available across multiple regions with a growing network of qualified professionals."
+                },
+              ].map((feature, idx) => (
+                <div
+                  key={feature.title}
+                  className="flex flex-col items-center space-y-2 rounded-2xl border border-white/20 bg-white/20 dark:bg-white/10 backdrop-blur-lg shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 p-8 cursor-pointer group"
+                >
+                  {feature.icon}
+                  <h3 className="text-xl font-bold text-white drop-shadow-lg group-hover:text-blue-200 transition">{feature.title}</h3>
+                  <p className="text-center text-white/80 group-hover:text-white transition">{feature.description}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32 bg-white dark:bg-gray-900">
+        <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -206,72 +300,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* About Us Section */}
-        <section id="about-us" className="w-full py-12 md:py-24 lg:py-32 gradient-bg-light dark:gradient-bg-dark">
-          <div className="container px-4 md:px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <FadeInSection>
-                <div className="space-y-6">
-                  <h2
-                    className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
-                    style={{ color: "#4A4A4A" }}
-                  >
-                    About ProL<span className="text-[#00A3E0]">ii</span>nk Co<span className="text-[#00A3E0]">nn</span>ect
-                  </h2>
-                  <div className="space-y-4">
-                    <p className="text-muted-foreground">
-                      ProLiink Connect is a pioneering platform that bridges the gap between skilled professionals and
-                      clients seeking quality services. We've created a marketplace where finding the right service
-                      provider is as simple as a few clicks, eliminating the frustration and uncertainty that often
-                      comes with hiring professionals.
-                    </p>
-                    <p className="text-muted-foreground">
-                      Founded in 2024, our mission has always been to empower both service providers and customers
-                      through technology. We believe that everyone deserves access to reliable, skilled professionals,
-                      and that talented service providers deserve a platform that helps them grow their business and
-                      connect with clients who value their expertise.
-                    </p>
-                    <p className="text-muted-foreground">
-                      Since our launch, we've grown to serve communities across Eastern Cape and beyond, with thousands
-                      of successful service connections made through our platform. Our commitment to quality,
-                      transparency, and customer satisfaction remains at the heart of everything we do, as we continue
-                      to expand our network and improve our services.
-                    </p>
-                  </div>
-                  <div>
-                    <Button className="bg-[#00A3E0] hover:bg-[#0089BD]" asChild>
-                      <Link href="/about">
-                        Learn More <ChevronRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              </FadeInSection>
-
-              <FadeInSection delay={300}>
-                <div className="relative">
-                  {/* Blurred gradient background */}
-                  <div className="absolute -inset-4 bg-gradient-to-r from-[#00A3E0]/30 to-[#4A4A4A]/30 rounded-xl blur-xl"></div>
-
-                  {/* Image with gradient overlay */}
-                  <div className="relative overflow-hidden rounded-xl shadow-xl">
-                    <div className="aspect-[4/3] w-full">
-                      <img
-                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/20250519_0959_Professional%20Home%20Services_simple_compose_01jvkrr8ctf4ft0z41ss9dvhby-ZuJkIHvwUUNvAcrOmG0Whja0KV5RIg.png"
-                        alt="ProLiink service professionals greeting a customer"
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-tr from-[#00A3E0]/20 to-transparent"></div>
-                    </div>
-                  </div>
-                </div>
-              </FadeInSection>
-            </div>
-          </div>
-        </section>
-
         {/* Why Choose Us Section */}
-        <section id="why-choose-us" className="w-full py-12 md:py-24 lg:py-32 bg-white dark:bg-gray-900">
+        <section id="why-choose-us" className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -325,75 +355,29 @@ export default function LandingPage() {
         </section>
 
         {/* Testimonials Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 gradient-bg-light dark:gradient-bg-dark">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-[#4A4A4A]">What Our Users Say</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-[#4A4A4A]">Frequently Asked Questions</h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Don't just take our word for it. Here's what people are saying about our platform.
+                  Find answers to common questions about our platform and services.
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3 mt-12">
-              <div className="flex flex-col space-y-4 rounded-lg border p-6 shadow-sm bg-card">
-                <div className="flex items-center space-x-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="h-5 w-5 fill-current text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-muted-foreground">
-                  "I found a trustworthy electrician in under 10 minutes—amazing platform!"
-                </p>
-                <div className="flex items-center space-x-2">
-                  <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                  <div>
-                    <p className="text-sm font-medium">Noxolo Mjokovane</p>
-                    <p className="text-xs text-muted-foreground">Homeowner</p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col space-y-4 rounded-lg border p-6 shadow-sm bg-card">
-                <div className="flex items-center space-x-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="h-5 w-5 fill-current text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-muted-foreground">
-                  "As a plumber, this platform has connected me with quality clients and streamlined my business."
-                </p>
-                <div className="flex items-center space-x-2">
-                  <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                  <div>
-                    <p className="text-sm font-medium">Msa Potelwa</p>
-                    <p className="text-xs text-muted-foreground">Service Provider</p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col space-y-4 rounded-lg border p-6 shadow-sm bg-card">
-                <div className="flex items-center space-x-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="h-5 w-5 fill-current text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-muted-foreground">
-                  "The secure payment system and clear communication tools make this the best service platform I've
-                  used."
-                </p>
-                <div className="flex items-center space-x-2">
-                  <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                  <div>
-                    <p className="text-sm font-medium">Emily Chen</p>
-                    <p className="text-xs text-muted-foreground">Business Owner</p>
-                  </div>
-                </div>
-              </div>
+            <div className="mx-auto max-w-2xl mt-12">
+              <FAQAccordion faqs={[
+                { question: "How do I book a service?", answer: "Simply use the booking form at the top of the page, select your category and service, and follow the steps." },
+                { question: "Do I need an account to book?", answer: "Yes, you need to be logged in to complete a booking. You can register or log in during the booking process." },
+                { question: "How are service providers vetted?", answer: "All providers go through a verification process to ensure quality and safety for our users." },
+                { question: "Can I reschedule or cancel a booking?", answer: "Yes, you can manage your bookings from your account dashboard after logging in." },
+              ]} />
             </div>
           </div>
         </section>
 
         {/* Partners Section */}
-        <section id="partners" className="w-full py-12 md:py-20 bg-gray-50 dark:bg-gray-900/50">
+        <section id="partners" className="w-full py-12 md:py-20 bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-[#4A4A4A] dark:text-white">
@@ -460,37 +444,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Contact Section */}
-        <section
-          id="contact"
-          className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-[#4A4A4A] to-[#00A3E0] dark:from-gray-900 dark:to-gray-800 text-white"
-        >
-          <div className="container px-4 md:px-6">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8">Contact Us</h2>
-            <div className="max-w-2xl mx-auto">
-              <p className="text-center mb-8">
-                Have questions or need assistance? Our team is here to help. Reach out to us using the information
-                below.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="text-center">
-                  <h3 className="text-xl font-bold mb-2">Email</h3>
-                  <p>support@proliinkconnect.co.za</p>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-xl font-bold mb-2">Phone</h3>
-                  <p>+27 78 128 3697</p>
-                </div>
-              </div>
-              <div className="mt-8 text-center">
-                
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Contact Form Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-blue-black text-white">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800 text-white">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -517,32 +472,33 @@ export default function LandingPage() {
               <p className="mt-2 text-sm text-muted-foreground">
                 The smart way to link professionals and clients.
               </p>
+              <img
+                src="/images/handshake.png"
+                alt="Handshake"
+                className="w-32 h-auto mx-auto mt-2 rounded-xl shadow"
+                style={{ maxWidth: '140px' }}
+              />
             </div>
             <div>
               <h3 className="text-lg font-bold">Quick Links</h3>
               <ul className="mt-2 space-y-2">
                 <li>
-                  <Link href="#about-us" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground">
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="#services" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/services" className="text-sm text-muted-foreground hover:text-foreground">
                     Services
                   </Link>
                 </li>
                 <li>
-                  <Link href="#how-it-works" className="text-sm text-muted-foreground hover:text-foreground">
-                    How It Works
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#blog" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground">
                     Blog
                   </Link>
                 </li>
                 <li>
-                  <Link href="#contact" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground">
                     Contact
                   </Link>
                 </li>
@@ -552,27 +508,27 @@ export default function LandingPage() {
               <h3 className="text-lg font-bold">Services</h3>
               <ul className="mt-2 space-y-2">
                 <li>
-                  <Link href="#plumbing" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/services#plumbing" className="text-sm text-muted-foreground hover:text-foreground">
                     Plumbing
                   </Link>
                 </li>
                 <li>
-                  <Link href="#electrical" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/services#electrical" className="text-sm text-muted-foreground hover:text-foreground">
                     Electrical
                   </Link>
                 </li>
                 <li>
-                  <Link href="#gardening" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/services#gardening-landscaping" className="text-sm text-muted-foreground hover:text-foreground">
                     Gardening
                   </Link>
                 </li>
                 <li>
-                  <Link href="#hair-styling" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/services#hair-styling" className="text-sm text-muted-foreground hover:text-foreground">
                     Hair Styling
                   </Link>
                 </li>
                 <li>
-                  <Link href="#painting" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/services#painting-renovations" className="text-sm text-muted-foreground hover:text-foreground">
                     Painting
                   </Link>
                 </li>
@@ -586,7 +542,7 @@ export default function LandingPage() {
                 <p>Mthatha, Eastern Cape</p>
                 <p>5099</p>
                 <p className="mt-2">
-                  <span className="block">Email: support@proliinkconnect.com</span>
+                  <span className="block">Email: support@proliinkconnect.co.za</span>
                   <span className="block">Phone: +27 78 128 3697</span>
                 </p>
               </address>

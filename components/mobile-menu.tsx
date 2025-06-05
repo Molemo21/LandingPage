@@ -41,20 +41,22 @@ export function MobileMenu({ links, providerLink }: MobileMenuProps) {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-opacity duration-300"
+          className="fixed inset-0 bg-black/80 z-40 backdrop-blur-md transition-opacity duration-300"
           onClick={closeMenu}
         />
       )}
 
       {/* Mobile menu panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-[75%] max-w-sm bg-background z-50 shadow-xl transform transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 right-0 h-full w-[80%] max-w-sm bg-black/90 backdrop-blur-lg z-50 shadow-2xl transform transition-all duration-300 ease-in-out ${
+          isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
         }`}
+        aria-modal="true"
+        role="dialog"
       >
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between p-4 border-b">
-            <span className="text-xl font-bold leading-tight">
+          <div className="flex items-center justify-between p-4 border-b border-white/10">
+            <span className="text-xl font-bold leading-tight text-white">
               <span className="flex flex-col">
                 <span>
                   ProL<span className="text-blue-600">ii</span>nk
@@ -65,7 +67,7 @@ export function MobileMenu({ links, providerLink }: MobileMenuProps) {
               </span>
             </span>
             <Button variant="ghost" size="icon" onClick={closeMenu} aria-label="Close menu">
-              <X className="h-6 w-6" />
+              <X className="h-6 w-6 text-white" />
             </Button>
           </div>
 
@@ -74,7 +76,7 @@ export function MobileMenu({ links, providerLink }: MobileMenuProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-foreground hover:text-blue-600 py-2 text-lg font-medium"
+                className="text-white hover:text-blue-400 py-2 text-lg font-semibold tracking-wide transition-colors"
                 onClick={closeMenu}
               >
                 {link.label}
@@ -84,7 +86,7 @@ export function MobileMenu({ links, providerLink }: MobileMenuProps) {
             {providerLink && (
               <Link
                 href={providerLink}
-                className="text-[#00A3E0] hover:text-[#0089BD] py-2 text-lg font-medium"
+                className="text-[#00A3E0] hover:text-[#0089BD] py-2 text-lg font-semibold tracking-wide transition-colors"
                 onClick={closeMenu}
               >
                 Become a Service Provider
@@ -92,9 +94,9 @@ export function MobileMenu({ links, providerLink }: MobileMenuProps) {
             )}
           </nav>
 
-          <div className="mt-auto p-4 border-t">
+          <div className="mt-auto p-4 border-t border-white/10">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Switch theme</span>
+              <span className="text-sm text-white/70">Switch theme</span>
               <ThemeToggle />
             </div>
           </div>

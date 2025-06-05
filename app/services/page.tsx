@@ -26,6 +26,7 @@ import {
   Clock,
   DollarSign,
   ChevronRight,
+  Flower,
 } from "lucide-react"
 
 export default function ServicesPage() {
@@ -127,6 +128,38 @@ export default function ServicesPage() {
       category: "Home Maintenance",
       slug: "home-maintenance",
     },
+    {
+      icon: <Hammer className="h-6 w-6" />,
+      title: "Carpentry",
+      description: "Expert carpentry services for custom furniture, repairs, and installations.",
+      subcategories: ["Custom furniture", "Cabinet making", "Wood repairs", "Decking", "Shelving"],
+      category: "Home Improvement",
+      slug: "carpentry",
+    },
+    {
+      icon: <Scissors className="h-6 w-6" />,
+      title: "Hairdresser",
+      description: "Professional hairdressing services for men, women, and children.",
+      subcategories: ["Haircuts", "Styling", "Coloring", "Braiding", "Treatments"],
+      category: "Personal Care",
+      slug: "hairdresser",
+    },
+    {
+      icon: <Flower className="h-6 w-6" />,
+      title: "Spa Treatments",
+      description: "Relax and rejuvenate with our range of spa treatments.",
+      subcategories: ["Massages", "Facials", "Manicures", "Pedicures", "Body treatments"],
+      category: "Personal Care",
+      slug: "spa-treatments",
+    },
+    {
+      icon: <Car className="h-6 w-6" />,
+      title: "Mobile Car Wash",
+      description: "Convenient mobile car wash services at your doorstep.",
+      subcategories: ["Exterior wash", "Interior cleaning", "Waxing", "Detailing", "Eco-friendly options"],
+      category: "Automotive",
+      slug: "mobile-car-wash",
+    },
   ]
 
   // Extract unique categories
@@ -221,15 +254,15 @@ export default function ServicesPage() {
                   <div className="space-y-4">
                     <div className="rounded-lg overflow-hidden shadow-md">
                       <img
-                        src="/placeholder.svg?height=200&width=300"
-                        alt="Plumber fixing a sink"
+                        src="/images/Cleaner%202.jpg"
+                        alt="Cleaner working in a home"
                         className="w-full h-auto object-cover"
                       />
                     </div>
                     <div className="rounded-lg overflow-hidden shadow-md">
                       <img
-                        src="/placeholder.svg?height=200&width=300"
-                        alt="Gardener working in a garden"
+                        src="/images/Plumber%202.jpg"
+                        alt="Plumber fixing a sink"
                         className="w-full h-auto object-cover"
                       />
                     </div>
@@ -237,15 +270,15 @@ export default function ServicesPage() {
                   <div className="space-y-4 pt-8">
                     <div className="rounded-lg overflow-hidden shadow-md">
                       <img
-                        src="/placeholder.svg?height=200&width=300"
+                        src="/images/electrician.png"
                         alt="Electrician installing lights"
                         className="w-full h-auto object-cover"
                       />
                     </div>
                     <div className="rounded-lg overflow-hidden shadow-md">
                       <img
-                        src="/placeholder.svg?height=200&width=300"
-                        alt="Cleaner cleaning a home"
+                        src="/images/spa%202.jpg"
+                        alt="Spa treatment in progress"
                         className="w-full h-auto object-cover"
                       />
                     </div>
@@ -274,6 +307,41 @@ export default function ServicesPage() {
                     subcategories={service.subcategories}
                     index={index}
                     slug={service.slug}
+                    backgroundImage={
+                      service.title === "Plumbing"
+                        ? "/images/plumber%2033.jpg"
+                      : service.title === "Electrical Services"
+                        ? "/images/electrician.png"
+                      : service.title === "Home Cleaning"
+                        ? "/images/cleaning%203.jpg"
+                      : service.title === "Appliance Repairs"
+                        ? "/images/applinces%20r3.jpg"
+                      : service.title === "Painting & Renovations"
+                        ? "/images/painter%203.jpg"
+                      : service.title === "Pest Control"
+                          ? "/images/pest%203.jpg"
+                          : service.title === "Gardening & Landscaping"
+                            ? "/images/gardner%203.jpg"
+                            : service.title === "Security System Installation"
+                              ? "/images/security%203.jpg"
+                              : service.title === "Computer & IT Support"
+                                ? "/images/IT%203.jpg"
+                                : service.title === "Car Maintenance"
+                                  ? "/images/car%20m3.jpg"
+                                  : service.title === "Mobile Car Wash"
+                                    ? "/images/mobile%20carwash%206.jpg"
+                                    : service.title === "Moving & Delivery"
+                                      ? "/images/moving%203.jpg"
+                                      : service.title === "Carpentry"
+                                        ? "/images/carpentry%206.jpg"
+                                        : service.title === "Hairdresser"
+                                          ? "/images/hair%206.jpg"
+                                          : service.title === "Spa Treatments"
+                                            ? "/images/spa%203.jpg"
+                                            : service.title === "Home Maintenance"
+                                              ? "/images/roof%206.jpg"
+                                              : undefined
+                    }
                   />
                 ))
               ) : (
@@ -350,7 +418,13 @@ export default function ServicesPage() {
                   Ready to Book a Reliable Pro?
                 </h2>
                 <p className="text-xl">Get started today and connect with skilled professionals in your area.</p>
-                <Button size="lg" className="bg-white text-[#00A3E0] hover:bg-gray-100">
+                <img
+                  src="/images/handshake.png"
+                  alt="Handshake"
+                  className="w-64 h-auto rounded-xl shadow-lg mx-auto"
+                  style={{ maxWidth: '320px' }}
+                />
+                <Button size="lg" className="bg-white text-[#00A3E0] hover:bg-gray-100 mt-4">
                   Get Started <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </motion.div>
