@@ -64,7 +64,7 @@ export default function ServiceProvidersPage() {
               >
                 <div className="relative overflow-hidden rounded-xl shadow-xl">
                   <img
-                    src="/images/service-provider-hero.png"
+                    src="/images/proliink%20meet.png"
                     alt="Service provider receiving job notification"
                     className="w-full h-auto"
                   />
