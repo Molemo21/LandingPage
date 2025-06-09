@@ -1,14 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth } from "./AuthContext"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Mail, Phone, Lock, Github, Chrome } from "lucide-react"
+import { Mail, Phone, Lock, Github, Chrome, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
+import { useRouter, usePathname } from "next/navigation"
 
 interface LoginModalProps {
   isOpen: boolean
@@ -19,11 +20,21 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { login } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [loginMethod, setLoginMethod] = useState<"email" | "phone">("email")
+  const [signupUrl, setSignupUrl] = useState("/signup")
+  const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     phone: "",
     password: "",
   })
+  const router = useRouter()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    // Set the signup URL with the current page as return URL
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+    setSignupUrl(`/signup?returnUrl=${encodeURIComponent(currentUrl)}`);
+  }, [pathname]); // Re-run when pathname changes
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -106,15 +117,28 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   <div className="relative">
                     <Input
                       id="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       value={formData.password}
                       onChange={(e) =>
                         setFormData((prev) => ({ ...prev, password: e.target.value }))
                       }
-                      className="pl-10"
+                      className="pl-10 pr-10"
                       required
                     />
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -146,7 +170,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
               <p className="text-center text-sm text-muted-foreground mt-6">
                 Don't have an account?{" "}
                 <Link
-                  href="/signup"
+                  href={signupUrl}
                   className="text-blue-500 hover:text-blue-600 font-medium"
                   onClick={onClose}
                 >

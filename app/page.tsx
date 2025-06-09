@@ -22,6 +22,7 @@ import {
   SprayCanIcon as Spray,
   Hammer,
   Paintbrush,
+  Sparkles,
 } from "lucide-react"
 import { HorizontalScrollBackground } from "@/components/horizontal-scroll-background"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -33,6 +34,7 @@ import { FAQAccordion } from "@/components/faq-accordion"
 import { ServiceCard } from "@/components/service-card"
 import { GodRays } from "@/components/god-rays"
 import { useRef } from "react"
+import { motion } from "framer-motion"
 
 export default function LandingPage() {
   // Navigation links
@@ -106,47 +108,116 @@ export default function LandingPage() {
     },
   ];
 
+  // Animation variants for floating elements
+  const floatingAnimation = {
+    initial: { y: 0 },
+    animate: {
+      y: [-10, 10, -10],
+      transition: {
+        duration: 4,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  }
+
+  const textAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  }
+
+  const serviceIcons = [
+    { icon: <Wrench className="w-8 h-8" />, delay: 0 },
+    { icon: <Zap className="w-8 h-8" />, delay: 0.2 },
+    { icon: <Spray className="w-8 h-8" />, delay: 0.4 },
+    { icon: <Hammer className="w-8 h-8" />, delay: 0.6 },
+    { icon: <Paintbrush className="w-8 h-8" />, delay: 0.8 }
+  ]
+
   return (
     <div className="flex min-h-screen flex-col relative overflow-hidden">
       <GodRays />
-      <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-md">
-        <div className="container flex h-16 items-center justify-between py-4">
-          <div className="flex items-center gap-3">
-            <img
-              src="/images/handshake.png"
-              alt="Handshake Logo"
-              className="h-8 w-auto rounded-md shadow"
-              style={{ maxWidth: '36px' }}
-            />
-            <Link href="/" className="text-xl font-bold leading-tight">
-              <span className="flex flex-col">
-                <span>
-                  ProL<span className="text-blue-600">ii</span>nk
-                </span>
-                <span>
-                  Co<span className="text-blue-600">nn</span>ect
-                </span>
-              </span>
-            </Link>
-          </div>
-          {/* Add nav links, theme toggle, and mobile menu here if needed */}
-        </div>
-      </header>
       <main className="flex-1">
-        {/* Hero Section with Horizontal Scrolling Background */}
-        <section className="relative w-full py-24 md:py-32 lg:py-40 overflow-hidden bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800">
-          <HorizontalScrollBackground images={heroBackgroundImages} />
-          <div className="container relative z-10 px-4 md:px-6">
-            <div className="max-w-3xl mx-auto text-center text-white">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl mb-6">
-                Connecting You with Trusted Professionals for Fast, Safe, and Reliable Services.
+        {/* Hero Section with Enhanced Background */}
+        <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800">
+          {/* Geometric Overlay */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute w-full h-full">
+              {/* Geometric patterns */}
+              <div className="absolute top-0 left-0 w-96 h-96 bg-[#00A3E0]/10 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2" />
+              <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2" />
+            </div>
+          </div>
+
+          {/* Enhanced Background Scroll */}
+          <div className="absolute inset-0 z-0">
+            <HorizontalScrollBackground 
+              images={[
+                "/images/Plumber.jpg%205.webp",
+                "/images/painter%205.jpg",
+                "/images/haidresser%205.webp",
+                "/images/spa%20treatment%205.jpg",
+                "/images/electrician%205.jpg",
+                // Add more service images here
+              ]} 
+            />
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+          </div>
+
+          {/* Floating Service Icons */}
+          <div className="absolute inset-0 pointer-events-none">
+            {serviceIcons.map((service, index) => (
+              <motion.div
+                key={index}
+                className="absolute text-white/80"
+                style={{
+                  left: `${15 + index * 20}%`,
+                  top: `${20 + (index % 3) * 20}%`
+                }}
+                variants={floatingAnimation}
+                initial="initial"
+                animate="animate"
+                transition={{ delay: service.delay }}
+              >
+                {service.icon}
+              </motion.div>
+            ))}
+        </div>
+
+          <div className="container relative z-10 px-4 md:px-6 py-24 md:py-32">
+            <div className="max-w-4xl mx-auto text-center text-white space-y-8">
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={textAnimation}
+                className="space-y-4"
+              >
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+                  The smart way to{" "}
+                  <span className="text-[#00A3E0]">link</span>
+                  {" "}professionals and clients
               </h1>
-              <p className="max-w-[600px] mx-auto text-gray-200 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed mb-8">
-                The smart way to link professionals and clients.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <p className="max-w-[600px] mx-auto text-gray-200 text-lg md:text-xl">
+                  Connect with trusted experts in your area, all in one place.
+                </p>
+              </motion.div>
+
+              {/* Enhanced Booking Form */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border border-white/20"
+              >
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#00A3E0] text-white px-4 py-1 rounded-full text-sm font-medium">
+                  Book a Service
+                </div>
                 <MultiStepForm />
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>

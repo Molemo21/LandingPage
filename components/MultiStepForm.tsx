@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
+import { useAuth } from "@/components/auth/AuthContext";
+import { AuthenticatedView } from "@/components/auth/AuthenticatedView";
 
 // Sample categories and services with common problems
 const categories = [
@@ -337,15 +339,14 @@ export function MultiStepForm() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormDataType>(defaultValues);
+  const methods = useForm({ defaultValues });
+  const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [progress, setProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState("");
-  const methods = useForm({ defaultValues });
-  const router = useRouter();
-
-  const commonInputClasses = "w-full rounded-lg border-2 px-4 py-3 bg-background transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
-  const commonLabelClasses = "block mb-2 font-medium text-base";
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const { isAuthenticated } = useAuth();
 
   // Loading messages sequence
   const loadingMessages = [
@@ -369,7 +370,9 @@ export function MultiStepForm() {
 
     // After loading completes
     await new Promise(resolve => setTimeout(resolve, 500));
-    router.push(`/service-providers?category=${selectedCategory}&service=${selectedService}&problem=${encodeURIComponent(selectedProblem)}`);
+    
+    // Redirect to service providers page with query parameters
+    router.push(`/service-providers?category=${selectedCategory}&service=${selectedService}&problem=${encodeURIComponent(selectedProblem)}&fromSearch=true`);
   };
 
   // Function to format date
@@ -514,6 +517,9 @@ export function MultiStepForm() {
   );
 
   const renderStep = () => {
+    const commonInputClasses = "w-full rounded-lg border-2 px-4 py-3 bg-background transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
+    const commonLabelClasses = "block mb-2 font-medium text-base";
+    
     switch (step) {
       case 1:
         return (
@@ -545,6 +551,34 @@ export function MultiStepForm() {
                 <option value="">Select a category</option>
                 {categories.map((cat) => (
                   <option key={cat.value} value={cat.value}>{cat.label}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <label className={commonLabelClasses}>Service</label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <HelpCircle className="w-4 h-4 text-muted-foreground" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Choose the specific service you require</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              <select
+                  className={`${commonInputClasses} ${!selectedCategory && 'opacity-50'}`}
+                value={selectedService}
+                onChange={handleServiceChange}
+                name="service"
+                required
+                disabled={!selectedCategory}
+              >
+                <option value="">{selectedCategory ? "Select a service" : "Select category first"}</option>
+                  {categories
+                    .find((cat) => cat.value === selectedCategory)
+                    ?.services.map((srv) => (
+                      <option key={srv.name} value={srv.name}>{srv.name}</option>
                 ))}
               </select>
             </div>
@@ -624,7 +658,7 @@ export function MultiStepForm() {
                   />
                   <div className="absolute inset-0 pointer-events-none rounded-lg bg-gradient-to-r from-blue-500/5 via-transparent to-blue-500/5" />
                 </div>
-              </div>
+          </div>
             </TooltipProvider>
           </motion.div>
         );
@@ -713,20 +747,20 @@ export function MultiStepForm() {
                   name="time"
                   value={formData.time}
                   onChange={handleTimeChange}
-                  className={`${commonInputClasses} pl-10`}
+                        className={`${commonInputClasses} pl-10`}
                   required
-                  min="08:00"
-                  max="18:00"
-                />
+                        min="08:00"
+                        max="18:00"
+                      />
                       <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 h-5 w-5" />
                       <div className="absolute inset-0 pointer-events-none rounded-lg bg-gradient-to-r from-blue-500/5 via-transparent to-blue-500/5" />
                     </div>
                     <p className="text-sm text-muted-foreground">
                       Choose a time between 8:00 AM and 6:00 PM
                     </p>
-                  </div>
-                </div>
               </div>
+            </div>
+          </div>
             </TooltipProvider>
           </motion.div>
         );
@@ -759,10 +793,10 @@ export function MultiStepForm() {
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <Input
-                  type="file"
-                  accept="image/png, image/jpeg"
-                  onChange={handleImageChange}
+            <Input
+              type="file"
+              accept="image/png, image/jpeg"
+              onChange={handleImageChange}
                   className="hidden"
                   id="file-upload"
                 />

@@ -63,8 +63,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // TODO: Implement actual signup logic
       // const response = await signupAPI(userData)
-      // setUser(response.user)
-      setIsAuthenticated(true)
+      // Do NOT set user or isAuthenticated here
+      // User needs to login separately after signup
+      return
     } catch (error) {
       throw new Error('Signup failed')
     }
