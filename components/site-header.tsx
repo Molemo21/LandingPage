@@ -15,6 +15,7 @@ import { useAuth } from "@/components/auth/AuthContext"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { MobileMenu } from "@/components/mobile-menu"
 
 interface SiteHeaderProps {
   variant?: 'default' | 'simple'
@@ -154,6 +155,26 @@ export function SiteHeader({ variant = 'default' }: SiteHeaderProps) {
                 )}
               </>
             )}
+          </div>
+          {/* Mobile actions: always show Login button, and pass onLoginClick to MobileMenu */}
+          <div className="flex md:hidden items-center gap-2">
+            <Button 
+              variant="ghost" 
+              onClick={() => setShowLoginModal(true)}
+              className="text-[#00A3E0] hover:text-[#00A3E0]/80"
+            >
+              Login
+            </Button>
+            <MobileMenu 
+              links={[
+                { href: '#features', label: 'Features' },
+                { href: '#how-it-works', label: 'How It Works' },
+                { href: '#partners', label: 'Partners' },
+                { href: '#why-choose-us', label: 'Why Choose Us' },
+              ]}
+              providerLink="/service-providers"
+              onLoginClick={() => setShowLoginModal(true)}
+            />
           </div>
         </div>
       </div>

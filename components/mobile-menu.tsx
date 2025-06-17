@@ -41,14 +41,14 @@ export function MobileMenu({ links, providerLink }: MobileMenuProps) {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/80 z-40 backdrop-blur-md transition-opacity duration-300"
+          className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-all duration-300 ease-in-out"
           onClick={closeMenu}
         />
       )}
 
       {/* Mobile menu panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-[80%] max-w-sm bg-black/90 backdrop-blur-lg z-50 shadow-2xl transform transition-all duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-[75%] max-w-sm bg-background/95 backdrop-blur-md z-50 shadow-xl transform transition-all duration-300 ease-in-out ${
           isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
         }`}
         aria-modal="true"

@@ -533,43 +533,43 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="w-full border-t py-12 bg-gray-100 dark:bg-gray-900">
+      <footer className="w-full border-t py-8 sm:py-12 bg-gray-100 dark:bg-gray-900">
         <div className="container px-4 md:px-6">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <div>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="space-y-3">
               <h3 className="text-lg font-bold">
                 ProL<span className="text-blue-600">ii</span>nk Co<span className="text-blue-600">nn</span>ect
               </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 The smart way to link professionals and clients.
               </p>
               <img
                 src="/images/handshake.png"
                 alt="Handshake"
-                className="w-32 h-auto mx-auto mt-2 rounded-xl shadow"
+                className="w-24 sm:w-32 h-auto mx-auto mt-4 rounded-xl shadow-md"
                 style={{ maxWidth: '140px' }}
               />
             </div>
-            <div>
+            <div className="space-y-3">
               <h3 className="text-lg font-bold">Quick Links</h3>
-              <ul className="mt-2 space-y-2">
+              <ul className="space-y-2.5">
                 <li>
-                  <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="/services" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/services" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                     Services
                   </Link>
                 </li>
                 <li>
-                  <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                     Blog
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                     Contact
                   </Link>
                 </li>

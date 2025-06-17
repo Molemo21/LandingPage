@@ -132,11 +132,11 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800 flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8 bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg">
+    <div className="min-h-screen bg-gradient-to-r from-[#f8fafc] to-[#e0f2fe] dark:from-gray-900 dark:to-gray-800 flex flex-col items-center justify-center p-2 xs:p-4">
+      <div className="w-full max-w-xs xs:max-w-sm sm:max-w-md space-y-8 bg-white dark:bg-gray-900 p-4 xs:p-6 sm:p-8 rounded-xl shadow-lg">
         <div className="text-center">
-          <h2 className="text-2xl font-bold tracking-tight">Create an Account</h2>
-          <p className="text-sm text-muted-foreground mt-2">
+          <h2 className="text-xl xs:text-2xl font-bold tracking-tight">Create an Account</h2>
+          <p className="text-xs xs:text-sm text-muted-foreground mt-2">
             Enter your details below to create your account
           </p>
         </div>

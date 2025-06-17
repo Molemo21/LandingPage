@@ -152,14 +152,14 @@ export function HeroServiceList() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
       >
         {filteredServices.map((service, index) => (
           <MotionDiv
             key={service.slug}
             variants={item}
             className={`
-              transform transition-all duration-500
+              transform transition-all duration-300 ease-in-out p-2 sm:p-3
               ${hoveredCategory === service.category ? 'scale-105 z-10' : 'scale-100 z-0'}
               ${hoveredCategory && hoveredCategory !== service.category ? 'opacity-75' : 'opacity-100'}
             `}

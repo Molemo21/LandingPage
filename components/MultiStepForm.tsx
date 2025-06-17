@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +21,8 @@ import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/components/auth/AuthContext";
 import { AuthenticatedView } from "@/components/auth/AuthenticatedView";
+// @ts-ignore
+import debounce from "lodash.debounce";
 
 // Sample categories and services with common problems
 const categories = [
@@ -330,6 +332,80 @@ const slideVariants = {
   })
 };
 
+// Add this mock data for South African locations
+const mockSouthAfricanLocations = [
+  {
+    display_name: "Johannesburg, Gauteng, South Africa",
+    place_id: "1",
+    osm_id: "1",
+    lat: "-26.2041",
+    lon: "28.0473"
+  },
+  {
+    display_name: "Cape Town, Western Cape, South Africa",
+    place_id: "2",
+    osm_id: "2",
+    lat: "-33.9249",
+    lon: "18.4241"
+  },
+  {
+    display_name: "Durban, KwaZulu-Natal, South Africa",
+    place_id: "3",
+    osm_id: "3",
+    lat: "-29.8587",
+    lon: "31.0218"
+  },
+  {
+    display_name: "Pretoria, Gauteng, South Africa",
+    place_id: "4",
+    osm_id: "4",
+    lat: "-25.7479",
+    lon: "28.2293"
+  },
+  {
+    display_name: "Port Elizabeth, Eastern Cape, South Africa",
+    place_id: "5",
+    osm_id: "5",
+    lat: "-33.7139",
+    lon: "25.5207"
+  },
+  {
+    display_name: "Bloemfontein, Free State, South Africa",
+    place_id: "6",
+    osm_id: "6",
+    lat: "-29.0852",
+    lon: "26.1596"
+  },
+  {
+    display_name: "Nelspruit, Mpumalanga, South Africa",
+    place_id: "7",
+    osm_id: "7",
+    lat: "-25.4753",
+    lon: "30.9694"
+  },
+  {
+    display_name: "Kimberley, Northern Cape, South Africa",
+    place_id: "8",
+    osm_id: "8",
+    lat: "-28.7282",
+    lon: "24.7499"
+  },
+  {
+    display_name: "Polokwane, Limpopo, South Africa",
+    place_id: "9",
+    osm_id: "9",
+    lat: "-23.9045",
+    lon: "29.4698"
+  },
+  {
+    display_name: "East London, Eastern Cape, South Africa",
+    place_id: "10",
+    osm_id: "10",
+    lat: "-33.0292",
+    lon: "27.8546"
+  }
+];
+
 export function MultiStepForm() {
   const [step, setStep] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -347,6 +423,27 @@ export function MultiStepForm() {
   const [loadingMessage, setLoadingMessage] = useState("");
   const [editingField, setEditingField] = useState<string | null>(null);
   const { isAuthenticated } = useAuth();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [addressSuggestions, setAddressSuggestions] = useState<any[]>([]);
+  const [isAddressLoading, setIsAddressLoading] = useState(false);
+  const [activeSuggestion, setActiveSuggestion] = useState(-1);
+  const addressInputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to top of content and form on step change
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    if (containerRef.current) {
+      containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Safe default for sticky header: offset by 72px
+      setTimeout(() => {
+        window.scrollBy({ top: -72, left: 0, behavior: 'smooth' });
+      }, 350); // Wait for scrollIntoView to finish (timing may be adjusted)
+    }
+  }, [step]);
 
   // Loading messages sequence
   const loadingMessages = [
@@ -371,8 +468,17 @@ export function MultiStepForm() {
     // After loading completes
     await new Promise(resolve => setTimeout(resolve, 500));
     
-    // Redirect to service providers page with query parameters
-    router.push(`/service-providers?category=${selectedCategory}&service=${selectedService}&problem=${encodeURIComponent(selectedProblem)}&fromSearch=true`);
+    // Pass date, time, and address as query params (date as ISO string)
+    const params = new URLSearchParams({
+      category: selectedCategory,
+      service: selectedService,
+      problem: selectedProblem,
+      date: formData.date ? formData.date.toISOString() : '',
+      time: formData.time || '',
+      address: formData.address || '',
+      fromSearch: 'true',
+    });
+    router.push(`/service-providers?${params.toString()}`);
   };
 
   // Function to format date
@@ -440,8 +546,9 @@ export function MultiStepForm() {
     setSelectedDate(date ?? null);
     setFormData((prev) => ({ ...prev, date: date ?? null }));
   };
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, time: e.target.value }));
+  const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, time: value }));
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -477,6 +584,111 @@ export function MultiStepForm() {
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  // Replace the fetchAddressSuggestions function with this mock version
+  const fetchAddressSuggestions = debounce(async (query: string) => {
+    if (!query) {
+      setAddressSuggestions([]);
+      setIsAddressLoading(false);
+      return;
+    }
+    setIsAddressLoading(true);
+    try {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      // Filter mock locations based on query
+      const filteredLocations = mockSouthAfricanLocations.filter(location =>
+        location.display_name.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      setAddressSuggestions(filteredLocations);
+    } catch (e) {
+      setAddressSuggestions([]);
+    }
+    setIsAddressLoading(false);
+  }, 400);
+
+  // Handle address input change
+  const handleAddressInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleInputChange(e);
+    setActiveSuggestion(-1);
+    fetchAddressSuggestions(e.target.value);
+  };
+
+  // Handle suggestion selection
+  const selectSuggestion = (suggestion: any) => {
+    setFormData((prev) => ({ ...prev, address: suggestion.display_name }));
+    setAddressSuggestions([]);
+    setActiveSuggestion(-1);
+  };
+
+  // Keyboard navigation for suggestions
+  const handleAddressKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!addressSuggestions.length) return;
+    if (e.key === "ArrowDown") {
+      setActiveSuggestion((prev) => Math.min(prev + 1, addressSuggestions.length - 1));
+    } else if (e.key === "ArrowUp") {
+      setActiveSuggestion((prev) => Math.max(prev - 1, 0));
+    } else if (e.key === "Enter" && activeSuggestion >= 0) {
+      selectSuggestion(addressSuggestions[activeSuggestion]);
+    } else if (e.key === "Escape") {
+      setAddressSuggestions([]);
+    }
+  };
+
+  // Click outside to close suggestions
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node) &&
+        addressInputRef.current &&
+        !addressInputRef.current.contains(event.target as Node)
+      ) {
+        setAddressSuggestions([]);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Replace the handleUseMyLocation function with this improved version
+  const handleUseMyLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          try {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 300));
+            
+            // Find the closest location from our mock data
+            const closestLocation = mockSouthAfricanLocations.reduce((closest, current) => {
+              const currentDistance = Math.sqrt(
+                Math.pow(parseFloat(current.lat) - pos.coords.latitude, 2) +
+                Math.pow(parseFloat(current.lon) - pos.coords.longitude, 2)
+              );
+              const closestDistance = Math.sqrt(
+                Math.pow(parseFloat(closest.lat) - pos.coords.latitude, 2) +
+                Math.pow(parseFloat(closest.lon) - pos.coords.longitude, 2)
+              );
+              return currentDistance < closestDistance ? current : closest;
+            });
+            
+            setFormData((prev) => ({ ...prev, address: closestLocation.display_name }));
+          } catch {
+            // Fallback to a default location if something goes wrong
+            setFormData((prev) => ({ ...prev, address: "Johannesburg, Gauteng, South Africa" }));
+          }
+        },
+        () => {
+          alert("Unable to retrieve your location. Please enter your address manually.");
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser. Please enter your address manually.");
     }
   };
 
@@ -526,10 +738,10 @@ export function MultiStepForm() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-6 w-full max-w-md"
+            className="space-y-6 w-full max-w-md mx-auto flex flex-col items-center justify-center"
           >
             <TooltipProvider>
-            <div>
+            <div className="w-full">
                 <div className="flex items-center gap-2 mb-2">
                   <label className={commonLabelClasses}>Category</label>
                   <Tooltip>
@@ -554,7 +766,7 @@ export function MultiStepForm() {
                 ))}
               </select>
             </div>
-            <div>
+            <div className="w-full">
                 <div className="flex items-center gap-2 mb-2">
                   <label className={commonLabelClasses}>Service</label>
                   <Tooltip>
@@ -663,105 +875,154 @@ export function MultiStepForm() {
           </motion.div>
         );
       case 3:
+        // Modern, visually cohesive redesign for location, date, and time
+        // Helper: generate time slots
+        const generateTimeSlots = () => {
+          const slots = [];
+          let hour = 8, minute = 0;
+          while (hour < 18 || (hour === 18 && minute === 0)) {
+            const h = hour.toString().padStart(2, '0');
+            const m = minute.toString().padStart(2, '0');
+            const ampm = hour < 12 ? 'AM' : 'PM';
+            const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+            slots.push(`${hour12}:${m} ${ampm}`);
+            minute += 30;
+            if (minute === 60) { hour++; minute = 0; }
+          }
+          return slots;
+        };
+        const timeSlots = generateTimeSlots();
         return (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-8 w-full max-w-2xl mx-auto"
+            className="w-full max-w-xl mx-auto"
           >
-            <TooltipProvider>
-              <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                  <label className={commonLabelClasses}>
-                    <MapPin className="w-4 h-4 inline-block mr-2" />
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col gap-8 border border-gray-100 dark:border-gray-800">
+              <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                <CalendarIcon className="w-6 h-6 text-blue-500" />
+                Schedule Your Service
+              </h2>
+              {/* Location */}
+              <div className="flex flex-col gap-2">
+                <label className="font-medium text-base flex items-center gap-2 mb-1">
+                  <MapPin className="w-5 h-5 text-blue-500" />
                     Service Location
                   </label>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="w-4 h-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Enter the address where you need the service</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-                <div className="relative">
+                <div className="flex gap-2 w-full relative">
               <Input
-                    className={`${commonInputClasses} pl-10`}
+                    ref={addressInputRef}
+                    className="flex-1 rounded-lg border-2 px-4 py-3 bg-background transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm"
                 name="address"
                 value={formData.address}
-                onChange={handleInputChange}
+                    onChange={handleAddressInput}
+                    onKeyDown={handleAddressKeyDown}
                     placeholder="Enter your address"
+                    autoComplete="off"
                 required
               />
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 h-5 w-5" />
-                  <div className="absolute inset-0 pointer-events-none rounded-lg bg-gradient-to-r from-blue-500/5 via-transparent to-blue-500/5" />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex items-center gap-1 px-3 py-2 border-blue-200 hover:border-blue-400 text-blue-500 hover:bg-blue-50 transition"
+                    onClick={handleUseMyLocation}
+                  >
+                    <MapPin className="w-4 h-4" />
+                    Use my location
+                  </Button>
+                  {/* Suggestions dropdown */}
+                  {((addressSuggestions.length > 0) || isAddressLoading) && (
+                    <div
+                      ref={suggestionsRef}
+                      className="absolute top-full left-0 w-full z-30 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg mt-2 max-h-60 overflow-y-auto animate-fade-in"
+                    >
+                      {isAddressLoading && (
+                        <div className="px-4 py-3 text-sm text-muted-foreground">Searching...</div>
+                      )}
+                      {addressSuggestions.map((s, i) => (
+                        <div
+                          key={s.place_id || s.osm_id || i}
+                          className={`px-4 py-3 cursor-pointer transition-colors duration-150 ${i === activeSuggestion ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600' : 'hover:bg-blue-50 dark:hover:bg-blue-900/20'} text-sm`}
+                          onMouseDown={() => selectSuggestion(s)}
+                          onMouseEnter={() => setActiveSuggestion(i)}
+                        >
+                          {s.display_name}
             </div>
+                      ))}
+                      {!isAddressLoading && addressSuggestions.length === 0 && (
+                        <div className="px-4 py-3 text-sm text-muted-foreground">No results found.</div>
+                      )}
               </div>
-
-              <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                  <label className={commonLabelClasses}>
-                    <CalendarIcon className="w-4 h-4 inline-block mr-2" />
-                    Schedule Service
-                  </label>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="w-4 h-4 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Choose your preferred service date and time</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  )}
                 </div>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="w-full">
+                <span className="text-xs text-muted-foreground mt-1 ml-1">We'll never share your address without your permission.</span>
+              </div>
+              <div className="border-t border-gray-200 dark:border-gray-800 my-2" />
+              {/* Date */}
+              <div className="flex flex-col gap-2">
+                <label className="font-medium text-base flex items-center gap-2 mb-1">
+                  <CalendarIcon className="w-5 h-5 text-blue-500" />
+                  Select Date
+                </label>
+                <div className="relative w-full max-w-xs">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full flex justify-between items-center px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
+                    onClick={() => setIsExpanded((v) => !v)}
+                  >
+                    <span>{selectedDate ? formatDate(selectedDate) : 'Choose a date'}</span>
+                    <CalendarIcon className="w-5 h-5 text-blue-500" />
+                  </Button>
+                  {isExpanded && (
+                    <div className="absolute z-20 mt-2 left-0 w-full bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 p-4 animate-fade-in">
                     <Calendar
                       mode="single"
                       selected={selectedDate || undefined}
-                      onSelect={(date: Date | undefined) => handleDateChange(date)}
-                      className="rounded-lg border shadow-sm w-full max-w-[300px] mx-auto md:max-w-none"
-                      disabled={(date) => date < new Date() || date < new Date("1900-01-01")}
+                        onSelect={(date: Date | undefined) => {
+                          handleDateChange(date);
+                          setIsExpanded(false);
+                        }}
+                        className="rounded-lg border shadow-sm w-full mx-auto"
+                        disabled={(date) => date < new Date() || date < new Date('1900-01-01')}
                       initialFocus
                       classNames={{
-                        months: "w-full",
-                        month: "w-full",
-                        table: "w-full",
-                        head_cell: "w-9 h-9",
-                        cell: "w-9 h-9",
-                        day: "w-9 h-9",
-                        nav_button: "h-7 w-7",
+                          months: 'w-full',
+                          month: 'w-full',
+                          table: 'w-full',
+                          head_cell: 'w-9 h-9',
+                          cell: 'w-9 h-9',
+                          day: 'w-9 h-9',
+                          nav_button: 'h-7 w-7',
                       }}
                     />
                   </div>
-                  
-                  <div className="space-y-4">
-                    <label className={cn(commonLabelClasses)}>
-                      <Clock className="w-4 h-4 inline-block mr-2" />
+                  )}
+                </div>
+                <span className="text-xs text-muted-foreground mt-1 ml-1">Pick your preferred service date.</span>
+              </div>
+              <div className="border-t border-gray-200 dark:border-gray-800 my-2" />
+              {/* Time */}
+              <div className="flex flex-col gap-2">
+                <label className="font-medium text-base flex items-center gap-2 mb-1">
+                  <Clock className="w-5 h-5 text-blue-500" />
                       Preferred Time
                     </label>
-                    <div className="relative">
-                <Input
-                  type="time"
+                <select
                   name="time"
                   value={formData.time}
                   onChange={handleTimeChange}
-                        className={`${commonInputClasses} pl-10`}
+                  className="w-full rounded-lg border-2 px-4 py-3 bg-background transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm appearance-none"
                   required
-                        min="08:00"
-                        max="18:00"
-                      />
-                      <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 h-5 w-5" />
-                      <div className="absolute inset-0 pointer-events-none rounded-lg bg-gradient-to-r from-blue-500/5 via-transparent to-blue-500/5" />
+                >
+                  <option value="">Select a time slot</option>
+                  {timeSlots.map((slot) => (
+                    <option key={slot} value={slot.replace(/\s/g, '')}>{slot}</option>
+                  ))}
+                </select>
+                <span className="text-xs text-muted-foreground mt-1 ml-1">Choose a time between 8:00 AM and 6:00 PM</span>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      Choose a time between 8:00 AM and 6:00 PM
-                    </p>
               </div>
-            </div>
-          </div>
-            </TooltipProvider>
           </motion.div>
         );
       case 4:
@@ -769,12 +1030,12 @@ export function MultiStepForm() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-6 w-full max-w-md"
+            className="space-y-6 w-full max-w-md mx-auto flex flex-col items-center justify-center"
           >
             <TooltipProvider>
               <div
                 className={cn(
-                  "text-center p-8 border-2 border-dashed rounded-lg transition-colors duration-300",
+                  "text-center p-8 border-2 border-dashed rounded-lg transition-colors duration-300 mx-auto",
                   "hover:border-blue-500 cursor-pointer"
                 )}
                 onDragOver={handleDragOver}
@@ -811,11 +1072,11 @@ export function MultiStepForm() {
                 </Button>
               </div>
               {imagePreview && (
-                <div className="mt-4">
+                <div className="mt-4 flex flex-col items-center justify-center">
                   <img
-                    src={imagePreview}
+                    src={imagePreview || ''}
                     alt="Preview"
-                    className="max-w-full h-auto rounded-lg shadow-md"
+                    className="max-w-full h-auto rounded-lg shadow-md mx-auto"
                   />
                   <Button
                     variant="ghost"
@@ -1011,13 +1272,18 @@ export function MultiStepForm() {
   };
 
   return (
-    <div className="w-full flex flex-col items-center px-4">
+    <div ref={containerRef} className="w-full flex flex-col items-center px-2 xs:px-4">
       {renderStepIndicator()}
-      <div className="w-full flex flex-col items-center">
+      <div
+        ref={contentRef}
+        className="w-full flex flex-col items-center max-w-2xl mx-auto min-h-[60vh] overflow-y-auto max-h-[60vh] sm:max-h-[70vh]"
+      >
+        <div className="w-full">
         <AnimatePresence mode="wait">
           {renderStep()}
         </AnimatePresence>
-        <div className="flex justify-between w-full max-w-2xl mt-8">
+        </div>
+        <div className="flex justify-between w-full gap-2 mt-8">
           {step > 1 && (
             <Button
               variant="outline"
