@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -34,17 +35,56 @@ function setPersistedJourney(data: any) {
   localStorage.setItem('bookingJourney', JSON.stringify(data));
 }
 
+// Type definitions
+type BookingDetails = {
+  category?: string;
+  service?: string;
+  problem?: string;
+  date?: string;
+  time?: string;
+  address?: string;
+};
+
+type PaymentForm = {
+  method: 'card' | 'paypal' | 'apple' | 'google';
+  useSaved: boolean;
+  card: string;
+  expiry: string;
+  cvv: string;
+  name: string;
+};
+
+type ServiceProgress = {
+  status: 'in_progress' | 'completed';
+  startedAt: string;
+  completedAt: string | null;
+};
+
+type JourneyStep = 'waiting' | 'ongoing' | 'payment' | 'review' | 'done' | null;
+
+// Update the User interface to match the auth context and include additional properties
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  isServiceProvider?: boolean;
+  profileImage?: string;
+  fullName?: string; // Add fullName as an optional property
+  [key: string]: any;
+}
+
 export default function ServiceProvidersPage() {
   const { isAuthenticated, logout, user } = useAuth()
   const [showLoginModal, setShowLoginModal] = useState(false)
   const searchParams = useSearchParams();
-  const category = searchParams.get('category');
-  const service = searchParams.get('service');
-  const problem = searchParams.get('problem');
+  const category = searchParams.get('category') || undefined;
+  const service = searchParams.get('service') || undefined;
+  const problem = searchParams.get('problem') || undefined;
   const fromSearch = searchParams.get('fromSearch');
   const dateISO = searchParams.get('date');
-  const time = searchParams.get('time');
-  const address = searchParams.get('address');
+  const time = searchParams.get('time') || undefined;
+  const address = searchParams.get('address') || undefined;
   let formattedDate = '';
   if (dateISO) {
     const d = new Date(dateISO);
@@ -59,7 +99,7 @@ export default function ServiceProvidersPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [acceptedProvider, setAcceptedProvider] = useState<any>(null);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [journeyStep, setJourneyStep] = useState<null | 'waiting' | 'ongoing' | 'payment' | 'review' | 'done'>(null);
+  const [journeyStep, setJourneyStep] = useState<JourneyStep>(null);
   const [reviewStars, setReviewStars] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const paymentInputRef = useRef<HTMLInputElement>(null);
@@ -72,12 +112,13 @@ export default function ServiceProvidersPage() {
   ]);
   const [chatInput, setChatInput] = useState("");
   const [isCalling, setIsCalling] = useState(false);
-  const [paymentForm, setPaymentForm] = useState(() => getPersistedJourney().paymentForm || {
+  const [paymentForm, setPaymentForm] = useState<PaymentForm>(() => getPersistedJourney().paymentForm || {
+    method: 'card',
+    useSaved: true,
     card: "",
     expiry: "",
     cvv: "",
     name: "",
-    useSaved: true,
   });
   const [isPaying, setIsPaying] = useState(false);
 
@@ -85,7 +126,7 @@ export default function ServiceProvidersPage() {
   const [activeView, setActiveView] = useState<'chat' | 'location' | 'help'>('chat');
   
   // Add service progress state
-  const [serviceProgress, setServiceProgress] = useState({
+  const [serviceProgress, setServiceProgress] = useState<ServiceProgress>({
     status: 'in_progress',
     startedAt: new Date().toISOString(),
     completedAt: null
@@ -155,6 +196,16 @@ export default function ServiceProvidersPage() {
     setJourneyStep('waiting');
     setTimeout(() => setJourneyStep('ongoing'), 2000);
   };
+
+  // Move createBookingDetails inside component to access state variables
+  const createBookingDetails = (): BookingDetails => ({
+    category,
+    service,
+    problem,
+    date: formattedDate,
+    time,
+    address,
+  });
 
   // Booking summary (from search params)
   const bookingSummary = (
@@ -238,25 +289,8 @@ export default function ServiceProvidersPage() {
           }, 1500);
         }}
         onConfirm={handleConfirm}
-        bookingDetails={{
-          category,
-          service,
-          problem,
-          date: formattedDate,
-          time,
-          address,
-        }}
-      >
-        <div className="p-4">
-          {bookingSummary}
-          <Button
-            onClick={handleConfirm}
-            className="w-full mt-4 bg-green-500 hover:bg-green-600"
-          >
-            Confirm & Book This Provider
-          </Button>
-        </div>
-      </ServiceProviderModal>
+        bookingDetails={createBookingDetails()}
+      />
     );
   };
 
@@ -688,7 +722,7 @@ export default function ServiceProvidersPage() {
                   <Button
                     variant={paymentForm.method === 'card' ? 'default' : 'outline'}
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setPaymentForm(f => ({ ...f, method: 'card' }))}
+                    onClick={() => handlePaymentFormChange('method', 'card')}
                   >
                     <CreditCard className="h-6 w-6" />
                     <span>Credit Card</span>
@@ -696,7 +730,7 @@ export default function ServiceProvidersPage() {
                   <Button
                     variant={paymentForm.method === 'paypal' ? 'default' : 'outline'}
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setPaymentForm(f => ({ ...f, method: 'paypal' }))}
+                    onClick={() => handlePaymentFormChange('method', 'paypal')}
                   >
                     <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M20.067 8.478c.492.315.844.825.844 1.522 0 1.845-1.534 3.373-3.373 3.373h-.674c-.315 0-.674.315-.674.674v1.348c0 .315-.315.674-.674.674h-1.348c-.315 0-.674-.315-.674-.674v-1.348c0-.315-.315-.674-.674-.674h-.674c-1.839 0-3.373-1.528-3.373-3.373 0-.697.352-1.207.844-1.522.315-.315.844-.315 1.159 0 .315.315.844.315 1.159 0 .315-.315.844-.315 1.159 0 .315.315.844.315 1.159 0z"/>
@@ -706,7 +740,7 @@ export default function ServiceProvidersPage() {
                   <Button
                     variant={paymentForm.method === 'apple' ? 'default' : 'outline'}
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setPaymentForm(f => ({ ...f, method: 'apple' }))}
+                    onClick={() => handlePaymentFormChange('method', 'apple')}
                   >
                     <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M17.05 20.28c-.98.95-2.05.88-3.08.41-1.09-.47-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.41C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.78 1.18-.19 2.31-.89 3.51-.84 1.54.07 2.7.61 3.44 1.57-3.14 1.88-2.29 5.13.22 6.41-.65 1.29-1.51 2.58-2.25 4.05zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
@@ -716,7 +750,7 @@ export default function ServiceProvidersPage() {
                   <Button
                     variant={paymentForm.method === 'google' ? 'default' : 'outline'}
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setPaymentForm(f => ({ ...f, method: 'google' }))}
+                    onClick={() => handlePaymentFormChange('method', 'google')}
                   >
                     <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M12.545 10.239v3.821h5.445c-.712 2.315-2.647 3.972-5.445 3.972a6.033 6.033 0 110-12.064c1.498 0 2.866.549 3.921 1.453l2.814-2.814A9.969 9.969 0 0012.545 2C7.021 2 2.543 6.477 2.543 12s4.478 10 10.002 10c8.396 0 10.249-7.85 9.426-11.748l-9.426-.013z"/>
@@ -735,7 +769,7 @@ export default function ServiceProvidersPage() {
                         type="checkbox" 
                         id="useSaved" 
                         checked={paymentForm.useSaved} 
-                        onChange={e => setPaymentForm(f => ({ ...f, useSaved: e.target.checked }))} 
+                        onChange={e => handlePaymentFormChange('useSaved', e.target.checked)} 
                       />
                       <label htmlFor="useSaved" className="text-sm">Use saved card (**** 1234)</label>
                     </div>
@@ -749,7 +783,7 @@ export default function ServiceProvidersPage() {
                             placeholder="Card Number" 
                             maxLength={19} 
                             value={paymentForm.card} 
-                            onChange={e => setPaymentForm(f => ({ ...f, card: e.target.value }))} 
+                            onChange={e => handlePaymentFormChange('card', e.target.value)} 
                             required 
                           />
                         </div>
@@ -759,7 +793,7 @@ export default function ServiceProvidersPage() {
                             placeholder="MM/YY" 
                             maxLength={5} 
                             value={paymentForm.expiry} 
-                            onChange={e => setPaymentForm(f => ({ ...f, expiry: e.target.value }))} 
+                            onChange={e => handlePaymentFormChange('expiry', e.target.value)} 
                             required 
                           />
                           <div className="relative flex-1">
@@ -769,7 +803,7 @@ export default function ServiceProvidersPage() {
                               placeholder="CVV" 
                               maxLength={4} 
                               value={paymentForm.cvv} 
-                              onChange={e => setPaymentForm(f => ({ ...f, cvv: e.target.value }))} 
+                              onChange={e => handlePaymentFormChange('cvv', e.target.value)} 
                               required 
                             />
                           </div>
@@ -778,7 +812,7 @@ export default function ServiceProvidersPage() {
                           className="w-full rounded-lg border-2 px-4 py-3 bg-background focus:border-blue-500" 
                           placeholder="Name on Card" 
                           value={paymentForm.name} 
-                          onChange={e => setPaymentForm(f => ({ ...f, name: e.target.value }))} 
+                          onChange={e => handlePaymentFormChange('name', e.target.value)} 
                           required 
                         />
                       </div>
@@ -881,8 +915,8 @@ export default function ServiceProvidersPage() {
   // Done Modal
   const renderDoneModal = () => {
     const handleClose = () => {
-      setJourneyStep('initial');
-      router.push('/'); // Navigate to main landing page
+      setJourneyStep(null);
+      router.push('/');
     };
 
     return (
@@ -943,6 +977,17 @@ export default function ServiceProvidersPage() {
     }
   });
 
+  // Fix the handleClose function
+  const handleClose = () => {
+    setJourneyStep(null);
+    router.push('/');
+  };
+
+  // Fix the payment form handlers
+  const handlePaymentFormChange = (field: keyof PaymentForm, value: any) => {
+    setPaymentForm(prev => ({ ...prev, [field]: value }));
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-md">
@@ -969,7 +1014,7 @@ export default function ServiceProvidersPage() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className="h-10 w-10">
-                      <AvatarImage src={user?.profileImage || ""} alt={user?.fullName || "User"} />
+                      <AvatarImage src={user?.profileImage || ""} alt={user?.fullName || user?.name || "User"} />
                       <AvatarFallback className="bg-[#00A3E0]/10">
                         <User className="h-5 w-5 text-[#00A3E0]" />
                       </AvatarFallback>
@@ -979,8 +1024,8 @@ export default function ServiceProvidersPage() {
                 <DropdownMenuContent className="w-56" align="end">
                   <div className="flex items-center justify-start gap-2 p-2">
                     <div className="flex flex-col space-y-1 leading-none">
-                      {user?.fullName && (
-                        <p className="font-medium">{user.fullName}</p>
+                      {(user?.fullName || user?.name) && (
+                        <p className="font-medium">{user.fullName || user.name}</p>
                       )}
                       {user?.email && (
                         <p className="w-[200px] truncate text-sm text-muted-foreground">

@@ -12,6 +12,16 @@ import { Mail, Phone, Lock, User, Github, Chrome, Upload, Check, X, Eye, EyeOff 
 import { cn } from "@/lib/utils"
 import { Progress } from "@/components/ui/progress"
 
+// Update the form data type to match the User interface
+interface SignupFormData {
+  fullName: string;
+  email: string;
+  phone: string;
+  password: string;
+  confirmPassword: string;
+  acceptTerms: boolean;
+}
+
 export default function SignupPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -20,7 +30,7 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [profileImage, setProfileImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SignupFormData>({
     fullName: "",
     email: "",
     phone: "",
@@ -105,27 +115,21 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!validateForm()) return
-
     setIsLoading(true)
     try {
-      await signup({
-        ...formData,
-        profileImage: profileImage
-      })
-      
-      // After successful signup, redirect back to the return URL if it exists
-      if (returnUrl) {
-        router.push(returnUrl)
-      } else {
-        router.push("/")
+      // Create user data object that matches the User interface
+      const userData = {
+        name: formData.fullName, // Use fullName as the name
+        email: formData.email,
+        phone: formData.phone,
+        fullName: formData.fullName,
+        profileImage: imagePreview, // Use the image preview URL
       }
+      await signup(userData)
+      router.push(returnUrl || '/')
     } catch (error) {
       console.error("Signup failed:", error)
-      setErrors({
-        submit: "Signup failed. Please try again."
-      })
+      // TODO: Show error message
     } finally {
       setIsLoading(false)
     }

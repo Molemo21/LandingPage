@@ -8,6 +8,8 @@ interface User {
   email: string
   phone?: string
   isServiceProvider?: boolean
+  profileImage?: string
+  fullName?: string
 }
 
 interface AuthContextType {

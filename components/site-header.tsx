@@ -105,7 +105,7 @@ export function SiteHeader({ variant = 'default' }: SiteHeaderProps) {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                       <Avatar className="h-10 w-10">
-                        <AvatarImage src={user?.profileImage || ""} alt={user?.fullName || "User"} />
+                        <AvatarImage src={user?.profileImage || ""} alt={user?.fullName || user?.name || "User"} />
                         <AvatarFallback className="bg-[#00A3E0]/10">
                           <User className="h-5 w-5 text-[#00A3E0]" />
                         </AvatarFallback>
@@ -115,8 +115,8 @@ export function SiteHeader({ variant = 'default' }: SiteHeaderProps) {
                   <DropdownMenuContent className="w-56" align="end">
                     <div className="flex items-center justify-start gap-2 p-2">
                       <div className="flex flex-col space-y-1 leading-none">
-                        {user?.fullName && (
-                          <p className="font-medium">{user.fullName}</p>
+                        {(user?.fullName || user?.name) && (
+                          <p className="font-medium">{user.fullName || user.name}</p>
                         )}
                         {user?.email && (
                           <p className="w-[200px] truncate text-sm text-muted-foreground">
