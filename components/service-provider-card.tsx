@@ -86,7 +86,7 @@ export function ServiceProviderCard({ provider, onViewDetails }: ServiceProvider
       {/* Price and Action */}
       <div className="flex items-center justify-between mt-4">
         <div className="text-lg font-semibold">
-          From R{provider.averagePrice}
+          From <span className="text-2xl font-bold text-green-500">R{provider.averagePrice}</span>
           <span className="text-sm text-muted-foreground">/job</span>
         </div>
         <Button onClick={onViewDetails} className="bg-blue-500 hover:bg-blue-600">

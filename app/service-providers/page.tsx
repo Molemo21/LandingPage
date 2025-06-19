@@ -157,6 +157,10 @@ export default function ServiceProvidersPage() {
   }, []);
 
   useEffect(() => {
+    // Reset journey state when category changes
+    if (category) {
+      localStorage.removeItem('bookingJourney');
+    }
     if (category) {
       const filteredProviders = generateMockServiceProviders(category);
       setProviders(filteredProviders);
@@ -181,7 +185,13 @@ export default function ServiceProvidersPage() {
   // Handler for Confirm
   const handleConfirm = () => {
     setShowConfirmModal(false);
-    setShowSuccess(true);
+    setTimeout(() => {
+      setJourneyStep('waiting');
+      setTimeout(() => {
+        setJourneyStep(null);
+        setShowSuccess(true);
+      }, 5000);
+    }, 0);
   };
 
   // Handler for Loop Back
@@ -193,8 +203,7 @@ export default function ServiceProvidersPage() {
   // After booking is confirmed, start the journey
   const handleBookingConfirmed = () => {
     setShowSuccess(false);
-    setJourneyStep('waiting');
-    setTimeout(() => setJourneyStep('ongoing'), 2000);
+    setJourneyStep('ongoing');
   };
 
   // Move createBookingDetails inside component to access state variables
@@ -1072,6 +1081,7 @@ export default function ServiceProvidersPage() {
               {showSuccess
                 ? renderSuccess()
                 : renderProvider()}
+              {renderConfirmModal()}
               {renderWaitingModal()}
               {renderOngoingModal()}
               {renderCallModal()}

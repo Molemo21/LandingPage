@@ -33,7 +33,7 @@ import { MultiStepForm } from "@/components/MultiStepForm"
 import { FAQAccordion } from "@/components/faq-accordion"
 import { ServiceCard } from "@/components/service-card"
 import { GodRays } from "@/components/god-rays"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { motion } from "framer-motion"
 
 export default function LandingPage() {
@@ -138,6 +138,19 @@ export default function LandingPage() {
     { icon: <Paintbrush className="w-8 h-8" />, delay: 0.8 }
   ]
 
+  const [showBookingForm, setShowBookingForm] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState("")
+
+  const handleBookService = (category: string) => {
+    setSelectedCategory(category)
+    setShowBookingForm(true)
+    // Scroll to the booking form
+    const bookingForm = document.getElementById('booking-form')
+    if (bookingForm) {
+      bookingForm.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <div className="flex min-h-screen flex-col relative overflow-hidden">
       <GodRays />
@@ -212,11 +225,12 @@ export default function LandingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border border-white/20"
+                id="booking-form"
               >
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#00A3E0] text-white px-4 py-1 rounded-full text-sm font-medium">
                   Book a Service
                 </div>
-                <MultiStepForm />
+                <MultiStepForm initialCategory={selectedCategory} />
               </motion.div>
             </div>
           </div>
@@ -254,6 +268,7 @@ export default function LandingPage() {
                           ? "/images/painter%203.jpg"
                         : undefined
                       }
+                      onBookService={handleBookService}
                     />
                   </div>
                 ))}

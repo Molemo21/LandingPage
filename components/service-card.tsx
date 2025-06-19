@@ -1,13 +1,12 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
-import Link from "next/link"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { ChevronRight } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 interface ServiceCardProps {
   icon: React.ReactNode
@@ -17,10 +16,37 @@ interface ServiceCardProps {
   index: number
   slug: string
   backgroundImage?: string
+  onBookService?: (category: string) => void
 }
 
-export function ServiceCard({ icon, title, description, subcategories, index, slug, backgroundImage }: ServiceCardProps) {
+export function ServiceCard({ 
+  icon, 
+  title, 
+  description, 
+  subcategories, 
+  index, 
+  slug, 
+  backgroundImage,
+  onBookService 
+}: ServiceCardProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
+
+  const handleBookService = () => {
+    // Map the service title to the corresponding category value
+    const categoryMap: { [key: string]: string } = {
+      "Plumbing": "plumbing",
+      "Electrical Services": "electrical",
+      "Home Cleaning": "cleaning",
+      "Appliance Repairs": "appliance-repairs",
+      "Painting & Renovations": "painting"
+    }
+
+    const category = categoryMap[title]
+    if (category && onBookService) {
+      onBookService(category)
+    }
+  }
 
   return (
     <>
@@ -53,8 +79,8 @@ export function ServiceCard({ icon, title, description, subcategories, index, sl
             <Button variant="outline" onClick={() => setIsOpen(true)}>
               Learn More
             </Button>
-            <Button className="bg-[#00A3E0] hover:bg-[#0089BD]" asChild>
-              <Link href={`/services/${slug}`}>Book Now</Link>
+            <Button className="bg-[#00A3E0] hover:bg-[#0089BD]" onClick={handleBookService}>
+              Book Now
             </Button>
           </div>
         </div>
@@ -97,8 +123,8 @@ export function ServiceCard({ icon, title, description, subcategories, index, sl
               </ol>
             </div>
             <div className="pt-4">
-              <Button className="w-full bg-[#00A3E0] hover:bg-[#0089BD]" asChild>
-                <Link href={`/services/${slug}`}>Book This Service</Link>
+              <Button className="w-full bg-[#00A3E0] hover:bg-[#0089BD]" onClick={handleBookService}>
+                Book This Service
               </Button>
             </div>
           </div>

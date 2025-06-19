@@ -41,17 +41,33 @@ const mockAvatars = [
   "https://ui-avatars.com/api/?name=Lisa+Davis&background=random",
 ];
 
+// Custom avatars for electrical providers
+const electricalAvatars = [
+  "/images/avatars/Sipho Ngcobo.jpg",
+  "/images/avatars/Luvo Nongcula.jpg",
+  "/images/avatars/Sinelizwi Mbolekwa.jpg",
+  "/images/avatars/Sechaba Tau.jpg",
+  "/images/avatars/Nombuso Mbatha.jpg",
+  "/images/avatars/Mbali Mkhize.jpg",
+];
+
 const mockBeforeAfterImages = {
   electrical: {
     before: [
-      "https://placehold.co/600x400/gray/white?text=Old+Wiring",
-      "https://placehold.co/600x400/gray/white?text=Faulty+Panel",
-      "https://placehold.co/600x400/gray/white?text=Outdated+Fixtures",
+      "/images/portfolio/electrical/before/residential-before.jpg",
+      "/images/portfolio/electrical/before/commercial-panel-before.jpg",
+      "/images/portfolio/electrical/before/lighting-before.jpg",
+      "/images/portfolio/electrical/before/circuit-breaker-before.jpg",
+      "/images/portfolio/electrical/before/emergency-lighting-before.jpg",
+      "/images/portfolio/electrical/before/maintence-before.jpg",
     ],
     after: [
-      "https://placehold.co/600x400/blue/white?text=New+Wiring",
-      "https://placehold.co/600x400/blue/white?text=Updated+Panel",
-      "https://placehold.co/600x400/blue/white?text=Modern+Fixtures",
+      "/images/portfolio/electrical/after/residential-after.jpg",
+      "/images/portfolio/electrical/after/commercial-panel-after.jpg",
+      "/images/portfolio/electrical/after/lighting-after.jpg",
+      "/images/portfolio/electrical/after/circuit-breaker-after.jpg",
+      "/images/portfolio/electrical/after/emergency-lighting-after.jpg",
+      "/images/portfolio/electrical/after/maintenance-after.jpg",
     ],
   },
   plumbing: {
@@ -269,6 +285,16 @@ export function generateMockServiceProviders(category: string | null): ServicePr
   const providers: ServiceProvider[] = [];
   const numberOfProviders = 6; // Minimum number of providers per category
 
+  // Custom names for electrical providers
+  const electricalNames = [
+    "Sipho Ngcobo",
+    "Luvo Nongcula",
+    "Sinelizwi Mbolekwa",
+    "Sechaba Tau",
+    "Nombuso Mbatha",
+    "Mbali Mkhize"
+  ];
+
   for (let i = 0; i < numberOfProviders; i++) {
     const specializations = categorySpecializations[category as keyof typeof categorySpecializations];
     const certifications = categoryCertifications[category as keyof typeof categoryCertifications];
@@ -277,18 +303,29 @@ export function generateMockServiceProviders(category: string | null): ServicePr
     // Generate 3 portfolio items
     const portfolio = [];
     for (let j = 0; j < 3; j++) {
+      const projectTitles = category === 'electrical' ? [
+        "Residential Electrical Installation",
+        "Commercial Panel Installation", 
+        "Professional Lighting System",
+        "Circuit Breaker Upgrade",
+        "Emergency Lighting Setup",
+        "Electrical Maintenance Service"
+      ] : [`Project ${j + 1}`, `Project ${j + 1}`, `Project ${j + 1}`];
+      
       portfolio.push({
-        title: `Project ${j + 1}`,
+        title: projectTitles[j],
         beforeImage: beforeAfterImages.before[j],
         afterImage: beforeAfterImages.after[j],
-        description: "Completed this project with attention to detail and client satisfaction in mind.",
+        description: category === 'electrical' ? 
+          "Professional electrical installation completed with attention to detail and safety standards." :
+          "Completed this project with attention to detail and client satisfaction in mind.",
       });
     }
 
     providers.push({
       id: `${category}-${i + 1}`,
-      name: `${category.charAt(0).toUpperCase() + category.slice(1)} Pro ${i + 1}`,
-      avatar: mockAvatars[i % mockAvatars.length],
+      name: category === 'electrical' ? electricalNames[i] : `${category.charAt(0).toUpperCase() + category.slice(1)} Pro ${i + 1}`,
+      avatar: category === 'electrical' ? electricalAvatars[i] : mockAvatars[i % mockAvatars.length],
       rating: 4 + Math.random(), // 4.0-5.0 rating
       reviewCount: Math.floor(Math.random() * 50) + 10, // 10-60 reviews
       completedJobs: Math.floor(Math.random() * 100) + 50, // 50-150 completed jobs

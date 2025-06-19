@@ -406,16 +406,28 @@ const mockSouthAfricanLocations = [
   }
 ];
 
-export function MultiStepForm() {
+interface MultiStepFormProps {
+  initialCategory?: string;
+}
+
+export function MultiStepForm({ initialCategory }: MultiStepFormProps) {
   const [step, setStep] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory || "");
   const [selectedService, setSelectedService] = useState("");
   const [selectedProblem, setSelectedProblem] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [formData, setFormData] = useState<FormDataType>(defaultValues);
-  const methods = useForm({ defaultValues });
+  const [formData, setFormData] = useState<FormDataType>({
+    ...defaultValues,
+    category: initialCategory || ""
+  });
+  const methods = useForm({ 
+    defaultValues: {
+      ...defaultValues,
+      category: initialCategory || ""
+    }
+  });
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -430,6 +442,18 @@ export function MultiStepForm() {
   const [activeSuggestion, setActiveSuggestion] = useState(-1);
   const addressInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+
+  // Update form when initialCategory changes
+  useEffect(() => {
+    if (initialCategory) {
+      setSelectedCategory(initialCategory);
+      setFormData(prev => ({
+        ...prev,
+        category: initialCategory
+      }));
+      methods.setValue('category', initialCategory);
+    }
+  }, [initialCategory, methods]);
 
   // Auto-scroll to top of content and form on step change
   useEffect(() => {

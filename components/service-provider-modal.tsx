@@ -47,7 +47,6 @@ export function ServiceProviderModal({ isOpen, onClose, provider, onAccept, onDe
   const handleConfirm = () => {
     setShowSummary(false);
     if (onConfirm) onConfirm();
-    onClose();
   };
 
   return (
@@ -74,48 +73,75 @@ export function ServiceProviderModal({ isOpen, onClose, provider, onAccept, onDe
                     {provider.completedJobs} jobs completed
                   </Badge>
                 </div>
+                <div className="mt-2 text-lg font-semibold">
+                  From <span className="text-2xl font-bold text-green-500">R{provider.averagePrice}</span>/job
+                </div>
               </div>
             </div>
           </div>
         </DialogHeader>
 
         {showSummary && bookingDetails ? (
-          <div className="py-8">
-            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 mb-4">
-              <h3 className="font-semibold mb-2 text-lg flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-blue-500" /> Booking Summary
-              </h3>
-              <div className="text-sm text-muted-foreground">
-                <div><span className="font-medium">Category:</span> {bookingDetails.category}</div>
-                <div><span className="font-medium">Service:</span> {bookingDetails.service}</div>
-                <div><span className="font-medium">Problem:</span> {bookingDetails.problem}</div>
-                <div><span className="font-medium">Date:</span> {bookingDetails.date}</div>
-                <div><span className="font-medium">Time:</span> {bookingDetails.time}</div>
-                <div><span className="font-medium">Address:</span> {bookingDetails.address}</div>
+          <div className="flex flex-col lg:flex-row h-[80vh]">
+            {/* Left Section - Payment Summary (60%) */}
+            <div className="flex-1 flex flex-col border-r border-gray-200 dark:border-gray-800 justify-center items-center">
+              {/* Payment Summary */}
+              {provider && (
+                (() => {
+                  const baseAmount = provider.averagePrice || 0;
+                  const transactionFee = baseAmount * 0.05;
+                  const calloutFee = 25;
+                  const totalAmount = baseAmount + transactionFee + calloutFee;
+                  return (
+                    <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8 mx-auto">
+                      <h3 className="text-xl font-semibold mb-6 text-left">Payment Summary</h3>
+                      <div className="grid grid-cols-2 gap-y-4 gap-x-6">
+                        <span className="flex flex-col items-end text-right">
+                          <span className="">Base Service Fee</span>
+                          <span className="text-xs text-muted-foreground">Standard service charge</span>
+                        </span>
+                        <span className="font-semibold text-left flex items-center">R{baseAmount.toFixed(2)}</span>
+                        <span className="flex flex-col items-end text-right">
+                          <span className="">Transaction Fee</span>
+                          <span className="text-xs text-muted-foreground">5% processing fee</span>
+                        </span>
+                        <span className="font-semibold text-left flex items-center">R{transactionFee.toFixed(2)}</span>
+                        <span className="flex flex-col items-end text-right">
+                          <span className="">Callout Fee</span>
+                          <span className="text-xs text-muted-foreground">Travel and setup costs</span>
+                        </span>
+                        <span className="font-semibold text-left flex items-center">R{calloutFee.toFixed(2)}</span>
+                        <span className="text-muted-foreground text-right">&nbsp;</span>
+                        <div className="flex flex-col">
+                          <span className="text-xs text-muted-foreground mb-1">Including all fees</span>
+                          <span className="text-2xl font-bold text-green-600">R{totalAmount.toFixed(2)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()
+              )}
+            </div>
+
+            {/* Right Section - Booking Summary (40%) */}
+            <div className="w-full lg:w-[40%] flex flex-col justify-center items-center">
+              {/* Booking Summary */}
+              <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8 mx-auto">
+                <h3 className="text-xl font-semibold mb-6 text-left">Booking Summary</h3>
+                <div className="grid grid-cols-2 gap-y-4 gap-x-6">
+                  <span className="text-muted-foreground text-right">Category</span>
+                  <span className="font-semibold text-left">{bookingDetails.category}</span>
+                  <span className="text-muted-foreground text-right">Service</span>
+                  <span className="font-semibold text-left">{bookingDetails.service}</span>
+                  <span className="text-muted-foreground text-right">Issue</span>
+                  <span className="font-semibold text-left">{bookingDetails.problem}</span>
+                  <span className="text-muted-foreground text-right">Date & Time</span>
+                  <span className="font-semibold text-left">{bookingDetails.date}, {bookingDetails.time}</span>
+                  <span className="text-muted-foreground text-right">Location</span>
+                  <span className="font-semibold text-left">{bookingDetails.address}</span>
+                </div>
               </div>
             </div>
-            <div className="bg-white dark:bg-gray-900 rounded-lg p-4 mb-4">
-              <h3 className="font-semibold mb-2 text-lg flex items-center gap-2">
-                <Avatar className="h-8 w-8 mr-2">
-                  <AvatarImage src={provider.avatar} alt={provider.name} />
-                  <AvatarFallback>{provider.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                {provider.name}
-              </h3>
-              <div className="text-sm text-muted-foreground mb-2">{provider.bio}</div>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {provider.specializations.map((spec: string, idx: number) => (
-                  <Badge key={idx} variant="secondary">{spec}</Badge>
-                ))}
-              </div>
-              <div className="text-sm text-muted-foreground">From R{provider.averagePrice}/job</div>
-            </div>
-            <Button
-              onClick={handleConfirm}
-              className="w-full mt-4 bg-green-500 hover:bg-green-600"
-            >
-              Confirm & Book This Provider
-            </Button>
           </div>
         ) : (
           <>
@@ -255,6 +281,18 @@ export function ServiceProviderModal({ isOpen, onClose, provider, onAccept, onDe
               </Button>
             </div>
           </>
+        )}
+
+        {/* Confirm Button - Bottom spanning both columns (only for booking summary) */}
+        {showSummary && bookingDetails && (
+          <div className="p-6 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
+            <Button
+              onClick={handleConfirm}
+              className="w-full h-12 text-lg font-semibold bg-green-500 hover:bg-green-600"
+            >
+              Confirm & Book This Provider
+            </Button>
+          </div>
         )}
       </DialogContent>
     </Dialog>
