@@ -11,9 +11,11 @@ interface TeamCardProps {
   role: string
   quote: string
   index: number
+  image?: string
+  linkedin?: string
 }
 
-export function TeamCard({ name, role, quote, index }: TeamCardProps) {
+export function TeamCard({ name, role, quote, index, image, linkedin }: TeamCardProps) {
   const [tiltAngle, setTiltAngle] = useState({ x: 0, y: 0 })
   const cardRef = useRef<HTMLDivElement>(null)
 
@@ -39,7 +41,7 @@ export function TeamCard({ name, role, quote, index }: TeamCardProps) {
   return (
     <motion.div
       ref={cardRef}
-      className="relative p-6 rounded-2xl backdrop-blur-md bg-white/10 border border-white/20 transition-all duration-300 hover:-translate-y-2"
+      className="relative p-6 rounded-2xl backdrop-blur-md bg-white/10 border border-white/20 transition-all duration-300 hover:-translate-y-2 overflow-hidden min-h-[340px] md:min-h-[360px] flex flex-col justify-center"
       style={{
         transform: `perspective(1000px) rotateX(${tiltAngle.x}deg) rotateY(${tiltAngle.y}deg)`,
         boxShadow: "0 0 20px rgba(255, 255, 255, 0.1)",
@@ -50,13 +52,16 @@ export function TeamCard({ name, role, quote, index }: TeamCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <div className="flex flex-col items-center text-center space-y-4">
-        <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-white/30">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#00A3E0]/50 to-[#4A4A4A]/50" />
-          <div className="w-full h-full bg-gray-300/20 flex items-center justify-center text-white/80 text-2xl font-bold">
-            {name.charAt(0)}
-          </div>
-        </div>
+      {/* Card-wide dimmed background image if provided */}
+      {image && (
+        <img
+          src={image}
+          alt={name + " card background"}
+          className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
+          style={{ filter: 'brightness(0.3) grayscale(1)' }}
+        />
+      )}
+      <div className="flex flex-col items-center text-center space-y-4 relative z-10 mt-52">
         <div>
           <h3 className="text-white font-semibold text-xl">{name}</h3>
           <p className="text-[#00A3E0] text-sm">{role}</p>
@@ -64,9 +69,10 @@ export function TeamCard({ name, role, quote, index }: TeamCardProps) {
         <p className="text-white/80 italic text-sm">"{quote}"</p>
         <div className="flex space-x-4 mt-2">
           <a
-            href="#"
+            href={linkedin || "#"}
             className="text-white/70 hover:text-[#00A3E0] transition-colors duration-300"
             aria-label={`${name}'s LinkedIn profile`}
+            target="_blank" rel="noopener noreferrer"
           >
             <Linkedin size={20} />
           </a>

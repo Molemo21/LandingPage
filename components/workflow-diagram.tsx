@@ -28,7 +28,7 @@ export function WorkflowDiagram() {
             <User className="h-8 w-8 text-[#00A3E0]" />
           </div>
           <h3 className="text-xl font-bold mb-2">Client</h3>
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-muted-foreground">
             Posts job requests, communicates requirements, and pays securely through the platform.
           </p>
         </motion.div>
@@ -44,7 +44,7 @@ export function WorkflowDiagram() {
             <Building className="h-8 w-8 text-[#00A3E0]" />
           </div>
           <h3 className="text-xl font-bold mb-2">ProLiink Connect</h3>
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-muted-foreground">
             Matches clients with providers, handles payments, and ensures quality service delivery.
           </p>
         </motion.div>
@@ -60,7 +60,7 @@ export function WorkflowDiagram() {
             <Wrench className="h-8 w-8 text-[#00A3E0]" />
           </div>
           <h3 className="text-xl font-bold mb-2">Service Provider</h3>
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-muted-foreground">
             Receives job requests, delivers quality service, and builds reputation through reviews.
           </p>
         </motion.div>

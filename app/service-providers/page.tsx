@@ -4,6 +4,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Briefcase, Calendar, CreditCard, Star, ChevronRight, MessageCircle } from "lucide-react"
+import { TestimonialCard } from "@/components/testimonial-card"
 
 export default function ServiceProvidersPage() {
   return (
@@ -45,7 +46,7 @@ export default function ServiceProvidersPage() {
                   Grow Your Business with ProL<span className="text-[#00A3E0]">ii</span>nk Co
                   <span className="text-[#00A3E0]">nn</span>ect
                 </h1>
-                <p className="text-xl text-muted-foreground">
+                <p className="text-xl text-gray-700 dark:text-muted-foreground">
                   Join a trusted network of service professionals and get matched with real clients near you.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -64,8 +65,8 @@ export default function ServiceProvidersPage() {
               >
                 <div className="relative overflow-hidden rounded-xl shadow-xl">
                   <img
-                    src="/images/service-provider-hero.png"
-                    alt="Service provider receiving job notification"
+                    src="/images/proliink meet.png"
+                    alt="Proliink Meet"
                     className="w-full h-auto"
                   />
                   <div className="absolute inset-0 bg-gradient-to-tr from-[#00A3E0]/20 to-transparent"></div>
@@ -87,7 +88,7 @@ export default function ServiceProvidersPage() {
                 transition={{ duration: 0.5 }}
               >
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Why Join ProLiink Connect?</h2>
-                <p className="max-w-[700px] text-muted-foreground">
+                <p className="max-w-[700px] text-gray-700 dark:text-muted-foreground">
                   Our platform is designed to help service providers like you grow their business and increase income.
                 </p>
               </motion.div>
@@ -126,7 +127,7 @@ export default function ServiceProvidersPage() {
                 >
                   <div className="mb-4">{benefit.icon}</div>
                   <h3 className="text-xl font-bold mb-2">{benefit.title}</h3>
-                  <p className="text-muted-foreground">{benefit.description}</p>
+                  <p className="text-gray-700 dark:text-muted-foreground">{benefit.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -145,56 +146,46 @@ export default function ServiceProvidersPage() {
                 transition={{ duration: 0.5 }}
               >
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">What Our Providers Say</h2>
-                <p className="max-w-[700px] text-muted-foreground">
+                <p className="max-w-[700px] text-gray-700 dark:text-muted-foreground">
                   Hear from service professionals who have grown their business with ProLiink Connect.
                 </p>
               </motion.div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  quote:
-                    "ProLiink helped me double my monthly bookings. Clients are easier to deal with and payments come through fast.",
-                  name: "Sipho Ndlovu",
-                  role: "Electrician",
-                },
-                {
-                  quote:
-                    "I've been able to grow my plumbing business without spending on advertising. The platform brings me quality clients.",
-                  name: "Thabo Molefe",
-                  role: "Plumber",
-                },
-                {
-                  quote:
-                    "As a handyman, I love the flexibility. I can choose jobs that fit my schedule and skills, and the payment process is seamless.",
-                  name: "John Smith",
-                  role: "Handyman",
-                },
-              ].map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.name}
-                  className="flex flex-col space-y-4 rounded-lg border p-6 shadow-sm bg-card"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <div className="flex items-center space-x-2">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className="h-5 w-5 fill-current text-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground">"{testimonial.quote}"</p>
-                  <div className="flex items-center space-x-2">
-                    <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                    <div>
-                      <p className="text-sm font-medium">{testimonial.name}</p>
-                      <p className="text-xs text-muted-foreground">{testimonial.role}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+              <TestimonialCard
+                quote="ProLiink helped me double my monthly bookings. The platform's scheduling system is incredibly efficient, and clients are easier to deal with. Payments come through fast and securely."
+                name="Sipho Ndlovu"
+                role="Master Electrician"
+                rating={5}
+                date="March 15, 2024"
+                projectDetails="Completed 150+ electrical installations and repairs through ProLiink Connect"
+                imageUrl="/images/providers/sipho.jpg"
+                verified={true}
+                likes={42}
+              />
+              <TestimonialCard
+                quote="I've been able to grow my plumbing business without spending on advertising. The platform brings me quality clients and the verification system ensures mutual trust. The support team is always helpful."
+                name="Thabo Molefe"
+                role="Licensed Plumber"
+                rating={5}
+                date="March 10, 2024"
+                projectDetails="Specializes in emergency repairs and installations, 200+ jobs completed"
+                imageUrl="/images/providers/thabo.jpg"
+                verified={true}
+                likes={38}
+              />
+              <TestimonialCard
+                quote="As a handyman, I love the flexibility. I can choose jobs that fit my schedule and skills. The payment process is seamless, and the platform helps me showcase my diverse range of services."
+                name="John Smith"
+                role="Professional Handyman"
+                rating={5}
+                date="March 12, 2024"
+                projectDetails="Expert in home repairs and maintenance, 180+ satisfied customers"
+                imageUrl="/images/providers/john.jpg"
+                verified={true}
+                likes={35}
+              />
             </div>
           </div>
         </section>
@@ -240,15 +231,15 @@ export default function ServiceProvidersPage() {
       <footer className="w-full border-t py-6 bg-gray-100 dark:bg-gray-900">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">© 2024 ProLiink Connect. All rights reserved.</p>
+            <p className="text-sm text-gray-700 dark:text-muted-foreground">© 2024 ProLiink Connect. All rights reserved.</p>
             <div className="flex items-center gap-4">
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-gray-700 dark:text-muted-foreground hover:text-foreground">
                 Privacy Policy
               </Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-gray-700 dark:text-muted-foreground hover:text-foreground">
                 Terms of Service
               </Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-gray-700 dark:text-muted-foreground hover:text-foreground">
                 Contact Us
               </Link>
             </div>

@@ -16,34 +16,43 @@ interface ServiceCardProps {
   subcategories: string[]
   index: number
   slug: string
+  image?: string
 }
 
-export function ServiceCard({ icon, title, description, subcategories, index, slug }: ServiceCardProps) {
+export function ServiceCard({ icon, title, description, subcategories, index, slug, image }: ServiceCardProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
       <motion.div
-        className="flex flex-col h-full rounded-lg border bg-card shadow-sm hover:shadow-md transition-all duration-300"
+        className="relative flex flex-col h-full rounded-lg border bg-card shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
       >
-        <div className="flex flex-col h-full p-6">
+        {image && (
+          <img
+            src={image}
+            alt={title + ' background'}
+            className="absolute inset-0 w-full h-full object-cover z-0"
+          />
+        )}
+        <div className="absolute inset-0 bg-black/60 z-10" />
+        <div className={"relative z-20 flex flex-col h-full p-6 text-white"}>
           <div className="flex items-center gap-4 mb-4">
-            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#00A3E0]/10 flex items-center justify-center text-[#00A3E0]">
+            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#00A3E0]/10 flex items-center justify-center text-[#00A3E0] bg-white/80">
               {icon}
             </div>
             <h3 className="text-xl font-bold">{title}</h3>
           </div>
-          <p className="text-muted-foreground mb-4">{description}</p>
+          <p className="mb-4" style={{ color: 'white', textShadow: '0 1px 4px rgba(0,0,0,0.7)' }}>{description}</p>
           <div className="mt-auto flex flex-col sm:flex-row gap-3">
-            <Button variant="outline" onClick={() => setIsOpen(true)}>
+            <Button variant="outline" onClick={() => setIsOpen(true)} className="border-white text-white hover:bg-white/10">
               Learn More
             </Button>
-            <Button className="bg-[#00A3E0] hover:bg-[#0089BD]" asChild>
-              <Link href={`/services/${slug}`}>Book Now</Link>
+            <Button className="bg-[#00A3E0] hover:bg-[#0089BD] text-white" asChild>
+              <Link href="/#joinlist">Joinlist</Link>
             </Button>
           </div>
         </div>

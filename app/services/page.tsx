@@ -26,7 +26,9 @@ import {
   Clock,
   DollarSign,
   ChevronRight,
+  ArrowLeftRight,
 } from "lucide-react"
+import { GodRays } from "@/components/god-rays"
 
 export default function ServicesPage() {
   // Service data
@@ -38,6 +40,7 @@ export default function ServicesPage() {
       subcategories: ["Leaks", "Pipe repairs", "Geyser installations", "Drainage", "Toilet repairs"],
       category: "Home Repairs",
       slug: "plumbing",
+      image: "/images/plumber 33.jpg",
     },
     {
       icon: <Zap className="h-6 w-6" />,
@@ -46,6 +49,7 @@ export default function ServicesPage() {
       subcategories: ["Fault finding", "Wiring", "Light fittings", "Compliance certificates", "Power outages"],
       category: "Home Repairs",
       slug: "electrical",
+      image: "/images/electrician 5.jpg",
     },
     {
       icon: <Spray className="h-6 w-6" />,
@@ -54,6 +58,7 @@ export default function ServicesPage() {
       subcategories: ["Deep cleaning", "Move-in/move-out", "Recurring services", "Window cleaning"],
       category: "Cleaning",
       slug: "home-cleaning",
+      image: "/images/cleaning 3.jpg",
     },
     {
       icon: <Hammer className="h-6 w-6" />,
@@ -62,6 +67,7 @@ export default function ServicesPage() {
       subcategories: ["Fridges", "Ovens", "Washing machines", "Dishwashers", "Microwaves"],
       category: "Home Repairs",
       slug: "appliance-repairs",
+      image: "/images/applinces r3.jpg",
     },
     {
       icon: <Paintbrush className="h-6 w-6" />,
@@ -70,6 +76,7 @@ export default function ServicesPage() {
       subcategories: ["Interior painting", "Exterior painting", "Plastering", "Touch-ups", "Wallpaper"],
       category: "Home Improvement",
       slug: "painting-renovations",
+      image: "/images/painter 3.jpg",
     },
     {
       icon: <Bug className="h-6 w-6" />,
@@ -78,6 +85,7 @@ export default function ServicesPage() {
       subcategories: ["Ants", "Rodents", "Cockroach treatments", "Termites", "Bed bugs"],
       category: "Home Maintenance",
       slug: "pest-control",
+      image: "/images/pest 3.jpg",
     },
     {
       icon: <Scissors className="h-6 w-6" />,
@@ -86,6 +94,7 @@ export default function ServicesPage() {
       subcategories: ["Lawn care", "Garden maintenance", "Landscaping", "Tree trimming", "Irrigation"],
       category: "Outdoor",
       slug: "gardening-landscaping",
+      image: "/images/gardener.webp",
     },
     {
       icon: <Shield className="h-6 w-6" />,
@@ -94,6 +103,7 @@ export default function ServicesPage() {
       subcategories: ["Cameras", "Alarms", "Smart systems", "Access control", "Intercom systems"],
       category: "Home Improvement",
       slug: "security-systems",
+      image: "/images/security 3.jpg",
     },
     {
       icon: <Laptop className="h-6 w-6" />,
@@ -102,6 +112,7 @@ export default function ServicesPage() {
       subcategories: ["PC repairs", "Virus removal", "Network setup", "Data recovery", "Software installation"],
       category: "Tech",
       slug: "computer-it-support",
+      image: "/images/IT 3.jpg",
     },
     {
       icon: <Car className="h-6 w-6" />,
@@ -110,6 +121,7 @@ export default function ServicesPage() {
       subcategories: ["Oil changes", "Tire replacement", "Battery service", "Brake repairs", "Engine diagnostics"],
       category: "Automotive",
       slug: "car-maintenance",
+      image: "/images/car m3.jpg",
     },
     {
       icon: <Truck className="h-6 w-6" />,
@@ -118,6 +130,7 @@ export default function ServicesPage() {
       subcategories: ["Home moving", "Furniture delivery", "Office relocation", "Packing services", "Storage"],
       category: "Transport",
       slug: "moving-delivery",
+      image: "/images/moving 3.jpg",
     },
     {
       icon: <Home className="h-6 w-6" />,
@@ -126,6 +139,25 @@ export default function ServicesPage() {
       subcategories: ["Handyman services", "Gutter cleaning", "Roof repairs", "Door & window repairs"],
       category: "Home Maintenance",
       slug: "home-maintenance",
+      image: "/images/roof 6.jpg",
+    },
+    {
+      icon: <Hammer className="h-6 w-6" />,
+      title: "Carpentry",
+      description: "Expert carpentry services for custom furniture, repairs, and installations.",
+      subcategories: ["Custom furniture", "Cabinetry", "Wood repairs", "Decking", "Shelving"],
+      category: "Home Improvement",
+      slug: "carpentry",
+      image: "/images/carpentry 6.jpg",
+    },
+    {
+      icon: <Car className="h-6 w-6" />,
+      title: "Mobile Car Wash",
+      description: "Convenient mobile car wash services at your doorstep.",
+      subcategories: ["Exterior wash", "Interior cleaning", "Waxing", "Detailing", "Engine cleaning"],
+      category: "Automotive",
+      slug: "mobile-car-wash",
+      image: "/images/Mobile carwash 6.jpg",
     },
   ]
 
@@ -221,15 +253,15 @@ export default function ServicesPage() {
                   <div className="space-y-4">
                     <div className="rounded-lg overflow-hidden shadow-md">
                       <img
-                        src="/placeholder.svg?height=200&width=300"
-                        alt="Plumber fixing a sink"
+                        src="/images/electrician.png"
+                        alt="Electrician at work"
                         className="w-full h-auto object-cover"
                       />
                     </div>
                     <div className="rounded-lg overflow-hidden shadow-md">
                       <img
-                        src="/placeholder.svg?height=200&width=300"
-                        alt="Gardener working in a garden"
+                        src="/images/hairdresser.webp"
+                        alt="Hairdresser styling hair"
                         className="w-full h-auto object-cover"
                       />
                     </div>
@@ -237,15 +269,15 @@ export default function ServicesPage() {
                   <div className="space-y-4 pt-8">
                     <div className="rounded-lg overflow-hidden shadow-md">
                       <img
-                        src="/placeholder.svg?height=200&width=300"
-                        alt="Electrician installing lights"
+                        src="/images/Cleaner 2.jpg"
+                        alt="Cleaner at work"
                         className="w-full h-auto object-cover"
                       />
                     </div>
                     <div className="rounded-lg overflow-hidden shadow-md">
                       <img
-                        src="/placeholder.svg?height=200&width=300"
-                        alt="Cleaner cleaning a home"
+                        src="/images/security 3.jpg"
+                        alt="Security professional"
                         className="w-full h-auto object-cover"
                       />
                     </div>
@@ -260,7 +292,7 @@ export default function ServicesPage() {
         <section className="w-full py-16 md:py-24 bg-white dark:bg-gray-900">
           <div className="container px-4 md:px-6">
             <div className="mb-12">
-              <ServiceFilter categories={categories} onFilterChange={handleFilterChange} />
+              <ServiceFilter categories={categories} onFilterChange={handleFilterChange} serviceTitles={services.map(s => s.title)} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -274,6 +306,7 @@ export default function ServicesPage() {
                     subcategories={service.subcategories}
                     index={index}
                     slug={service.slug}
+                    image={service.image}
                   />
                 ))
               ) : (
@@ -332,12 +365,19 @@ export default function ServicesPage() {
                 index={3}
               />
             </div>
+            <div className="flex justify-center mt-10">
+              <img src="/images/handshake.png" alt="Handshake" className="max-w-xs w-full rounded-xl shadow-lg" />
+            </div>
           </div>
         </section>
 
         {/* Final CTA Section */}
-        <section className="w-full py-16 md:py-24 bg-gradient-to-r from-[#00A3E0] to-[#4A4A4A] text-white">
-          <div className="container px-4 md:px-6">
+        <section className="w-full py-16 md:py-24 bg-black text-white relative overflow-hidden">
+          {/* God rays background */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <GodRays />
+          </div>
+          <div className="container px-4 md:px-6 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <motion.div
                 className="space-y-6"
@@ -350,7 +390,11 @@ export default function ServicesPage() {
                   Ready to Book a Reliable Pro?
                 </h2>
                 <p className="text-xl">Get started today and connect with skilled professionals in your area.</p>
-                <Button size="lg" className="bg-white text-[#00A3E0] hover:bg-gray-100">
+                <Button
+                  size="lg"
+                  className="bg-white text-[#00A3E0] hover:bg-gray-100 border-2 border-yellow-400 shadow-[0_0_12px_2px_rgba(255,215,0,0.6)] transition-shadow"
+                  style={{ boxShadow: '0 0 16px 2px rgba(255,215,0,0.7)' }}
+                >
                   Get Started <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </motion.div>
@@ -362,13 +406,12 @@ export default function ServicesPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                <div className="relative overflow-hidden rounded-xl shadow-xl">
+                <div className="w-full aspect-[4/3] rounded-xl overflow-hidden shadow-xl flex">
                   <img
-                    src="/placeholder.svg?height=400&width=600"
-                    alt="Happy client with service professional"
-                    className="w-full h-auto object-cover"
+                    src="/images/acc.png"
+                    alt="Ready to book"
+                    className="w-full h-full object-cover object-top"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#00A3E0]/20 to-transparent"></div>
                 </div>
               </motion.div>
             </div>
@@ -384,10 +427,10 @@ export default function ServicesPage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">© 2024 ProLiink Connect. All rights reserved.</p>
             <div className="flex items-center gap-4">
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground">
                 Privacy Policy
               </Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="/terms-of-service" className="text-sm text-muted-foreground hover:text-foreground">
                 Terms of Service
               </Link>
               <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">

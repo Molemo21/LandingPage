@@ -32,7 +32,7 @@ export function ProcessStep({ icon, number, title, description, delay = 0 }: Pro
           </span>
           <h3 className="text-xl font-bold">{title}</h3>
         </div>
-        <p className="text-muted-foreground">{description}</p>
+        <p className="text-gray-700 dark:text-muted-foreground">{description}</p>
       </div>
     </motion.div>
   )

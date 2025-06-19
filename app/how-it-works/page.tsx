@@ -73,9 +73,6 @@ export default function HowItWorksPage() {
   // Info items
   const infoItems = [
     {
-      text: "No subscription fees – we earn when you earn.",
-    },
-    {
       text: "Support team available if you need help.",
     },
     {
@@ -127,7 +124,7 @@ export default function HowItWorksPage() {
                   Here's How ProL<span className="text-[#00A3E0]">ii</span>nk Co
                   <span className="text-[#00A3E0]">nn</span>ect Works for You
                 </h1>
-                <p className="text-xl text-muted-foreground">
+                <p className="text-xl text-gray-700 dark:text-muted-foreground">
                   From sign-up to payday, everything is made simple so you can focus on what you do best.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -168,7 +165,7 @@ export default function HowItWorksPage() {
                 transition={{ duration: 0.5 }}
               >
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Your Journey with ProLiink Connect</h2>
-                <p className="max-w-[700px] text-muted-foreground">
+                <p className="max-w-[700px] text-gray-700 dark:text-muted-foreground">
                   A simple, straightforward process designed to get you earning quickly.
                 </p>
               </motion.div>
@@ -201,7 +198,7 @@ export default function HowItWorksPage() {
                 transition={{ duration: 0.5 }}
               >
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">How the Platform Works</h2>
-                <p className="max-w-[700px] text-muted-foreground">
+                <p className="max-w-[700px] text-gray-700 dark:text-muted-foreground">
                   A seamless connection between clients, our platform, and you.
                 </p>
               </motion.div>
@@ -225,7 +222,7 @@ export default function HowItWorksPage() {
                 transition={{ duration: 0.5 }}
               >
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">What Our Providers Say</h2>
-                <p className="max-w-[700px] text-muted-foreground">
+                <p className="max-w-[700px] text-gray-700 dark:text-muted-foreground">
                   Real experiences from service professionals like you.
                 </p>
               </motion.div>
@@ -257,7 +254,7 @@ export default function HowItWorksPage() {
                 transition={{ duration: 0.5 }}
               >
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Transparent & Fair</h2>
-                <p className="max-w-[700px] text-muted-foreground">
+                <p className="max-w-[700px] text-gray-700 dark:text-muted-foreground">
                   We believe in clear communication and straightforward policies.
                 </p>
               </motion.div>
@@ -305,15 +302,15 @@ export default function HowItWorksPage() {
       <footer className="w-full border-t py-6 bg-gray-100 dark:bg-gray-900">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">© 2024 ProLiink Connect. All rights reserved.</p>
+            <p className="text-sm text-gray-700 dark:text-muted-foreground">© 2024 ProLiink Connect. All rights reserved.</p>
             <div className="flex items-center gap-4">
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-gray-700 dark:text-muted-foreground hover:text-foreground">
                 Privacy Policy
               </Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-gray-700 dark:text-muted-foreground hover:text-foreground">
                 Terms of Service
               </Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-gray-700 dark:text-muted-foreground hover:text-foreground">
                 Contact Us
               </Link>
             </div>

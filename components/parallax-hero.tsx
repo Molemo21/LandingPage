@@ -47,7 +47,7 @@ export function ParallaxHero({ title, subtitle, children }: ParallaxHeroProps) {
           className="space-y-6"
         >
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter">{title}</h1>
-          <p className="max-w-[700px] mx-auto text-lg md:text-xl text-muted-foreground">{subtitle}</p>
+          <p className="max-w-[700px] mx-auto text-lg md:text-xl text-gray-700 dark:text-muted-foreground">{subtitle}</p>
           {children}
         </motion.div>
       </div>

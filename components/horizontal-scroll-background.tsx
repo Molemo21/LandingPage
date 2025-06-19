@@ -25,12 +25,12 @@ export function HorizontalScrollBackground({ images }: HorizontalScrollBackgroun
       <div className="absolute inset-0 w-full h-full bg-black/60 z-10" />
 
       {/* Scrolling container */}
-      <div ref={containerRef} className="absolute inset-0 w-full h-full flex animate-scroll-x">
+      <div ref={containerRef} className="absolute inset-0 w-full h-full flex animate-scroll-x-fast" style={{alignItems: 'center'}}>
         {/* First set of images */}
         {images.map((src, index) => (
           <div
             key={`img-${index}`}
-            className="flex-shrink-0 min-w-full h-full bg-cover bg-center"
+            className="flex-shrink-0 w-[400px] h-full bg-cover bg-center transition-all duration-500"
             style={{ backgroundImage: `url(${src})` }}
           />
         ))}
@@ -39,7 +39,7 @@ export function HorizontalScrollBackground({ images }: HorizontalScrollBackgroun
         {images.map((src, index) => (
           <div
             key={`img-dup-${index}`}
-            className="flex-shrink-0 min-w-full h-full bg-cover bg-center"
+            className="flex-shrink-0 w-[400px] h-full bg-cover bg-center transition-all duration-500"
             style={{ backgroundImage: `url(${src})` }}
           />
         ))}

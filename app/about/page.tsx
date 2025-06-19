@@ -65,7 +65,11 @@ export default function AboutPage() {
     <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
       <ParallaxHero
-        title="About ProLiink Connect"
+        title={
+          <span>
+            About ProL<span className="text-blue-600">ii</span>nk Co<span className="text-blue-600">nn</span>ect
+          </span>
+        }
         subtitle="Connecting skilled professionals with clients across Africa since 2024"
       >
         <motion.div
@@ -95,19 +99,19 @@ export default function AboutPage() {
             >
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Our Story</h2>
               <div className="space-y-4">
-                <p className="text-muted-foreground">
+                <p className="text-gray-700 dark:text-muted-foreground">
                   ProLiink Connect was founded in 2024 with a simple yet powerful vision: to revolutionize how people
                   connect with service professionals. What began as a solution to the frustration of finding reliable
                   contractors has grown into a comprehensive platform that serves communities across Eastern Cape and
                   beyond.
                 </p>
-                <p className="text-muted-foreground">
+                <p className="text-gray-700 dark:text-muted-foreground">
                   We recognized two critical problems in the service industry: clients struggled to find trustworthy,
                   skilled professionals, while talented service providers lacked effective ways to market themselves and
                   grow their businesses. ProLiink Connect bridges this gap, creating a marketplace where quality,
                   reliability, and transparency are paramount.
                 </p>
-                <p className="text-muted-foreground">
+                <p className="text-gray-700 dark:text-muted-foreground">
                   Today, we're proud to be a leading platform in our market, with thousands of successful service
                   connections made through our platform. As we continue to grow, we remain committed to our core
                   mission: empowering both service providers and customers through technology that makes finding and
@@ -140,7 +144,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Mission & Values Section */}
-      <section className="w-full py-16 md:py-24 lg:py-32 gradient-bg-light dark:gradient-bg-dark">
+      <section className="w-full py-16 md:py-24 lg:py-32 bg-black">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
             <motion.div
@@ -151,7 +155,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-[#4A4A4A]">Our Mission & Values</h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              <p className="max-w-[900px] text-gray-700 dark:text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 At ProLiink Connect, we're guided by a set of core values that shape everything we do.
               </p>
             </motion.div>
@@ -193,9 +197,36 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((member, index) => (
-              <TeamCard key={member.name} name={member.name} role={member.role} quote={member.quote} index={index} />
-            ))}
+            {teamMembers.map((member, index) => {
+              let image, linkedin;
+              if (member.name === "Bubele Mbizeni") {
+                image = "/images/Snapchat-1788989837.jpg";
+                linkedin = "https://www.linkedin.com/in/bubele-mbizeni/";
+              } else if (member.name === "Qhawe Mlengana") {
+                image = "/images/IMG-20241021-WA0010.jpg";
+                linkedin = "https://www.linkedin.com/in/qhawe-yamkela-mlengana-ab2669181/";
+              } else if (member.name === "Molemo Nakin") {
+                image = "/images/MN.jpg";
+                linkedin = "https://www.linkedin.com/in/molemo-nakin/";
+              } else if (member.name === "Nontlahla Adonis") {
+                image = "/images/NA.jpg";
+                linkedin = "https://www.linkedin.com/in/nontlahla-adonis-999815210/";
+              } else if (member.name === "Aphiwe Gaya") {
+                image = "/images/AG.jpg";
+                linkedin = "https://www.linkedin.com/in/aphiwe-gaya-0214b5174/";
+              }
+              return (
+                <TeamCard
+                  key={member.name}
+                  name={member.name}
+                  role={member.role}
+                  quote={member.quote}
+                  index={index}
+                  {...(image ? { image } : {})}
+                  {...(linkedin ? { linkedin } : {})}
+                />
+              );
+            })}
           </div>
         </div>
       </section>
@@ -236,15 +267,15 @@ export default function AboutPage() {
       <footer className="w-full border-t py-6 bg-gray-100 dark:bg-gray-900">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">© 2024 ProLiink Connect. All rights reserved.</p>
+            <p className="text-sm text-gray-700 dark:text-muted-foreground">© 2024 ProLiink Connect. All rights reserved.</p>
             <div className="flex items-center gap-4">
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-gray-700 dark:text-muted-foreground hover:text-foreground">
                 Privacy Policy
               </Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-gray-700 dark:text-muted-foreground hover:text-foreground">
                 Terms of Service
               </Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-gray-700 dark:text-muted-foreground hover:text-foreground">
                 Contact Us
               </Link>
             </div>

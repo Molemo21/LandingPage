@@ -25,7 +25,11 @@ export function QuoteCard({ quote, author, role, index = 0 }: QuoteCardProps) {
         <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
         <div>
           <p className="font-medium">{author}</p>
-          <p className="text-sm text-muted-foreground">{role}</p>
+          {(role === "Handyman" || role === "Plumber") ? (
+            <p className="text-sm text-blue-600">{role}</p>
+          ) : (
+            <p className="text-sm text-muted-foreground">{role}</p>
+          )}
         </div>
       </div>
     </motion.div>
