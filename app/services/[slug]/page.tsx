@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 
 type PageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
-export default function ServiceDetailPage({ params }: PageProps) {
-  const { slug } = params
+export default async function ServiceDetailPage({ params }: PageProps) {
+  const { slug } = await params
 
   // Format the slug for display
   const formattedTitle = slug
