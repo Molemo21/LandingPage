@@ -1,10 +1,14 @@
-"use client"
-
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 
-export default function ServiceDetailPage({ params }: { params: { slug: string } }) {
+type PageProps = {
+  params: {
+    slug: string;
+  };
+};
+
+export default function ServiceDetailPage({ params }: PageProps) {
   const { slug } = params
 
   // Format the slug for display
