@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 
 interface ParallaxHeroProps {
-  title: string
+  title: React.ReactNode
   subtitle: string
   children?: React.ReactNode
 }
