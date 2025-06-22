@@ -331,7 +331,7 @@ export function generateMockServiceProviders(category: string | null): ServicePr
       completedJobs: Math.floor(Math.random() * 100) + 50, // 50-150 completed jobs
       specializations: specializations.slice(0, Math.floor(Math.random() * 3) + 2), // 2-4 specializations
       averagePrice: Math.floor(Math.random() * 500) + 200, // R200-R700 average price
-      isOnline: Math.random() > 0.3, // 70% chance of being online
+      isOnline: true,
       bio: `Experienced ${category} professional with a passion for quality work and customer satisfaction. Specialized in ${specializations[0]} and ${specializations[1]}.`,
       certifications: certifications.slice(0, Math.floor(Math.random() * 2) + 2).map(name => ({ name })),
       portfolio,

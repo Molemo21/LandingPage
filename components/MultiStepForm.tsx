@@ -398,6 +398,13 @@ const mockSouthAfricanLocations = [
     lon: "29.4698"
   },
   {
+    display_name: "Mthatha, Eastern Cape, South Africa",
+    place_id: "11",
+    osm_id: "11",
+    lat: "-31.5886",
+    lon: "28.7900"
+  },
+  {
     display_name: "East London, Eastern Cape, South Africa",
     place_id: "10",
     osm_id: "10",
